@@ -25,4 +25,7 @@ class newFeol(FormView):
         cursor = connection.cursor()
         cursor.execute("insert into feol(rname, t_t, t_n) values(%s,%s,%s)", [form.data['name'], form.data['t_t'],
                                                                               form.data['t_n']])
+        groups = form.data['groups'].split('-')
+        for group in groups:
+            cursor.execute("insert into olgp(rname, gpname) values(%s, %s)", [form.data['name'], group])
         return HttpResponse("رشته جدید با موفقیت اضافه شد")
