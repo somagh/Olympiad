@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from dbadmin.views import test
+from dbadmin.views import test, newFeol
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^test/$',test)
+    url(r'^test/$',test),
+    url(r'^newfeol/$',newFeol.as_view())
 ]
