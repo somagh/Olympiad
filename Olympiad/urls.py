@@ -16,10 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from dbadmin.views import test, newFeol
+from dbadmin.views import test, newFeol, NewOl
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/$',test),
-    url(r'^newfeol/$',newFeol.as_view())
+    url(r'^newfeol/$',newFeol.as_view()),
+    url(r'^newol/$',NewOl.as_view())
 ]

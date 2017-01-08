@@ -7,14 +7,15 @@ from django.shortcuts import render
 from django.views.generic import FormView
 from django.views.generic import TemplateView
 
-from dbadmin.forms import NewFeolForm
+from Olympiad.helpers import run_query
+from dbadmin.forms import NewFeolForm, NewOlForm
 
 
 def test(request):
-    cursor=connection.cursor()
-    cursor.execute("select * from emtehan")
+    cursor = connection.cursor()
+    cursor.execute("select * from feol")
     columns = [col[0] for col in cursor.description]
-    return HttpResponse([dict(zip(columns,row)) for row in cursor.fetchall()])
+    return HttpResponse([dict(zip(columns, row)) for row in cursor.fetchall()])
 
 
 class newFeol(FormView):
@@ -22,10 +23,19 @@ class newFeol(FormView):
     form_class = NewFeolForm
 
     def form_valid(self, form):
-        cursor = connection.cursor()
-        cursor.execute("insert into feol(rname, t_t, t_n) values(%s,%s,%s)", [form.data['name'], form.data['t_t'],
-                                                                              form.data['t_n']])
+        run_query("insert into feol(rname, t_t, t_n) values(%s,%s,%s)", [form.data['name'], form.data['t_t'],
+                                                                         form.data['t_n']])
         groups = form.data['groups'].split('-')
         for group in groups:
-            cursor.execute("insert into olgp(rname, gpname) values(%s, %s)", [form.data['name'], group])
+            run_query("insert into olgp(rname, gpname) values(%s, %s)", [form.data['name'], group])
         return HttpResponse("رشته جدید با موفقیت اضافه شد")
+
+
+class NewOl(FormView):
+    form_class = NewOlForm
+    template_name = 'dbadmin/newOl.html'
+
+    def form_valid(self, form):
+        run_query("insert into ol(rname, saghfeoftadan, yr, t_m1, t_m2) values(%s,%s,%s,%s,%s)",
+                  [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'], form.data['t_m2']])
+        return HttpResponse("المپیاد جدید با موفقیت اضافه شد")
