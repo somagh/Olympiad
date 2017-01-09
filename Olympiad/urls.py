@@ -24,11 +24,16 @@ problem_urlpatterns = [
     url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit')
 ]
 
+course_urlpatterns = [
+    url(r'^add/$', AddCourseView.as_view(), name='add'),
+    url(r'^(?P<cname>\w+(-\w+)*)/$', EditCourseView.as_view(), name='edit'),
+]
+
 olympiad_urlpatterns = [
     url(r'^$', OlympiadView.as_view(), name='home'),
-    url(r'^course/$', AddCourseView.as_view(), name='add-course'),
-    url(r'^course/(?P<cname>\w+(-\w+)*)/$', EditCourseView.as_view(), name='edit-course'),
+    url(r'^course/', include(course_urlpatterns, namespace='course')),
     url(r'^m1m2date/$', M1M2Date.as_view(), name='m1m2date'),
+    url(r'^problem/(?P<eid>\d+)/', include(problem_urlpatterns, namespace='problem')),
 ]
 
 urlpatterns = [
@@ -36,5 +41,4 @@ urlpatterns = [
     url(r'^new-field/$',newFeol.as_view(), name='new-field'),
     url(r'^new-olympiad/$',NewOl.as_view(), name='new-olympiad'),
     url(r'^olympiad/(?P<fname>\w+(-\w+)*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
-    url(r'^problem/(?P<eid>\d+)/', include(problem_urlpatterns, namespace='problem')),
 ]

@@ -56,26 +56,30 @@ class M1M2Date(OlympiadMixin, FormView):
         run_query(
             "update exam set edate=%s where eid=(select eid from m1 where fname=%s and year=%s)",
             [form.data['m1_date'], form.data['rname'], form.data['yr']])
-        old_count=run_query("select count(*) from examday natural join m2 where fname=%s and year=%s",[form.data['rname'],form.data['yr']],fetch=True)[0]['count']
-        counter=0
-        for i in range (int(form.data['m2_day_count'])):
+        old_count = \
+            run_query("select count(*) from examday natural join m2 where fname=%s and year=%s",
+                      [form.data['rname'], form.data['yr']], fetch=True)[0]['count']
+        counter = 0
+        for i in range(int(form.data['m2_day_count'])):
             print(i)
             print(counter)
-            if(form.data['m2_'+str(i)+'_date']==""):
+            if form.data['m2_' + str(i) + '_date'] == "":
                 continue
-            if(counter<old_count):
+            if counter < old_count:
                 run_query(
                     "update examday set percentage=%s where fname=%s and year=%s and num=%s",
-                    [form.data['m2_'+str(i)+'_darsad'], form.data['rname'], form.data['yr'],counter])
+                    [form.data['m2_' + str(i) + '_darsad'], form.data['rname'], form.data['yr'],
+                     counter])
             else:
                 run_query(
                     "insert into examday(fname,year,num,percentage) values(%s,%s,%s,%s)",
-                    [form.data['rname'],form.data['yr'],counter,form.data['m2_'+str(i)+'_darsad']])
+                    [form.data['rname'], form.data['yr'], counter,
+                     form.data['m2_' + str(i) + '_darsad']])
             run_query(
                 "update exam set edate=%s where eid=(select eid from examday where fname=%s and year=%s and num=%s)",
-                [form.data['m2_'+str(i)+'_date'], form.data['rname'], form.data['yr'],counter])
-            counter+=1
-        for i in range (counter,old_count):
+                [form.data['m2_' + str(i) + '_date'], form.data['rname'], form.data['yr'], counter])
+            counter += 1
+        for i in range(counter, old_count):
             run_query(
                 "delete from exam where eid=(select eid from examday where fname=%s and year=%s and num=%s)",
                 [form.data['rname'], form.data['yr'], i])
@@ -88,8 +92,9 @@ class AddProblemView(OlympiadMixin, FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        run_query('insert into problem(eid, type, score, text, author_id) values(%s, %s, %s, %s, %s)',
-                  [self.kwargs['eid'], data['type'], data['score'], data['text'], data['author']])
+        run_query(
+            'insert into problem(eid, type, score, text, author_id) values(%s, %s, %s, %s, %s)',
+            [self.kwargs['eid'], data['type'], data['score'], data['text'], data['author']])
         return super().form_valid(form)
 
 

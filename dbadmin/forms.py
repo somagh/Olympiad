@@ -38,14 +38,15 @@ class M1M2DateForm(forms.Form):
         self.fields['yr'].initial = yr
         self.fields['m1_date'].initial = run_query('select edate from exam where eid='
                                                    '(select eid from m1 where year=%s and fname=%s)',
-                                                   [yr, rname], fetch=True)[0]['edate']
-        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True, raise_not_found=True)
+                                                   [yr, rname], fetch=True, raise_not_found=False)[0]['edate']
+        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True, raise_not_found=False)
         self.fields['m2_day_count'].initial = len(m2days)
         for m2day in m2days:
             self.fields['m2_' + str(m2day['num']) + '_date'] = forms.CharField(initial=m2day['edate'],label="تاریخ",required=False)
             self.fields['m2_' + str(m2day['num']) + '_darsad'] = forms.IntegerField(initial=m2day['percentage'],label="درصد تاثیر",required=False)
 
-        class ProblemForm(forms.Form):
+
+class ProblemForm(forms.Form):
     score = forms.IntegerField(label='نمره')
     type = forms.BooleanField(label='تستی', required=False)
     text = forms.CharField(widget=forms.Textarea(), label='متن سوال')
@@ -60,11 +61,14 @@ class M1M2DateForm(forms.Form):
         return data
 
     def __init__(self, **kwargs):
-        eid = kwargs.pop('eid')
-        pnum = kwargs.pop('pnum')
-        super().__init__(**kwargs)
-        if not eid or not pnum:
+        if 'eid' in kwargs and 'pnum' in kwargs:
+            eid = kwargs.pop('eid')
+            pnum = kwargs.pop('pnum')
+        else:
+            super().__init__(**kwargs)
             return
+
+        super().__init__(**kwargs)
 
         problem = run_query('select * from problem where eid=%s and pnum=%s',
                             [eid, pnum], fetch=True)[0]
