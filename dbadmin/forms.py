@@ -27,6 +27,7 @@ class M1M2DateForm(forms.Form):
 
     rname = forms.CharField(widget=forms.HiddenInput())
     yr = forms.IntegerField(widget=forms.HiddenInput())
+    m2_day_count = forms.IntegerField(widget=forms.HiddenInput())
     m1_date = forms.CharField(label="تاریخ مرحله اول")
 
     def __init__(self, *args, **kwargs):
@@ -39,6 +40,7 @@ class M1M2DateForm(forms.Form):
                                                    '(select eid from m1 where year=%s and fname=%s)',
                                                    [yr, rname], fetch=True)[0]['edate']
         m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True)
+        self.fields['m2_day_count'].initial = len(m2days)
         for m2day in m2days:
-            self.fields['m2_' + m2day['num'] + '_date'] = forms.CharField(initial=m2day['date'])
-            self.fields['m2_' + m2day['num'] + '_darsad'] = forms.IntegerField(initial=m2day['percentage'])
+            self.fields['m2_' + str(m2day['num']) + '_date'] = forms.CharField(initial=m2day['edate'],label="تاریخ",required=False)
+            self.fields['m2_' + str(m2day['num']) + '_darsad'] = forms.IntegerField(initial=m2day['percentage'],label="درصد تاثیر",required=False)

@@ -1,7 +1,7 @@
 from django.db import connection
 
 
-def run_query(query, params=None, fetch=False):
+def run_query(query: object, params: object = None, fetch: object = False) -> object:
     cursor = connection.cursor()
     cursor.execute(query, params)
     if fetch:
