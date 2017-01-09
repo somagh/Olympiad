@@ -1,13 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>آزمون های مرحله اول و دوم</title>
-</head>
-<body>
+{% extends  "base.html" %}
+{% load static%}
+{% block static %}
+    {{ block.super }}
+    <script src="{% static 'dbadmin/addm2day.js' %}"></script>
+{% endblock %}
+
+{% block title %}آزمون های مرحله اول و دوم{% endblock %}
+{% block content%}
  <form method="post">
+    {% csrf_token %}
      {{ form.as_p }}
+     <div id="m2days">
+         <b>مرحله دوم</b>
+
+     </div>
+     <button id="add_m2_button" type="button">اضافه کردن روز مرحله دوم</button>
      <button type="submit">ثبت</button>
  </form>
-</body>
-</html>
+{% endblock %}

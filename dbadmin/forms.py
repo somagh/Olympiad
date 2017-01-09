@@ -27,7 +27,7 @@ class M1M2DateForm(forms.Form):
 
     rname = forms.CharField(widget=forms.HiddenInput())
     yr = forms.IntegerField(widget=forms.HiddenInput())
-    m1_date = forms.CharField()
+    m1_date = forms.CharField(label="تاریخ مرحله اول")
 
     def __init__(self, *args, **kwargs):
         rname = kwargs.pop('rname')

@@ -50,3 +50,7 @@ class M1M2Date(FormView):
         kwargs['rname'] = self.request.GET.get('rname')
         kwargs['yr'] = self.request.GET.get('yr')
         return kwargs
+
+    def form_valid(self, form):
+        run_query("update emtehan set edate=%s where eid=(select eid from m1 where rname=%s and yr=%s)",[form.data['m1_date'],form.data['rname'],form.data['yr']])
+        return HttpResponse("اطلاعات با موفقیت به روز شد")
