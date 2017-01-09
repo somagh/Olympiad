@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'scholar',
     'dbadmin',
-    'ysc'
+    'ysc',
+    'olympiad_manager',
 ]
 
 MIDDLEWARE = [
