@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from olympiad_manager.views import ProblemListView, AddProblemView, EditProblemView, AddCourseView, \
-    EditCourseView, OlympiadView, M1M2Date
+    EditCourseView, OlympiadView, M1M2Date, CourseListView
 
 problem_urlpatterns = [
     url(r'^$',ProblemListView.as_view(),name='list'),
@@ -10,6 +10,7 @@ problem_urlpatterns = [
 ]
 
 course_urlpatterns = [
+    url(r'^$', CourseListView.as_view(), name='list'),
     url(r'^add/$', AddCourseView.as_view(), name='add'),
     url(r'^(?P<cname>\w+(-\w+)*)/$', EditCourseView.as_view(), name='edit'),
 ]
