@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'Olympiad.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Olympiad',
+        'NAME': 'olympiad',
         'USER': 'root',
         'PASSWORD': 'sag',
         'HOST': 'localhost',

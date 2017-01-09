@@ -23,11 +23,13 @@ class newFeol(FormView):
     form_class = NewFeolForm
 
     def form_valid(self, form):
-        run_query("insert into feol(rname, t_t, t_n) values(%s,%s,%s)", [form.data['name'], form.data['t_t'],
-                                                                         form.data['t_n']])
+        run_query("insert into field(fname, gold_no, silver_no) values(%s,%s,%s)",
+                  [form.data['name'], form.data['t_t'],
+                   form.data['t_n']])
         groups = form.data['groups'].split('-')
         for group in groups:
-            run_query("insert into olgp(rname, gpname) values(%s, %s)", [form.data['name'], group])
+            run_query("insert into groups(fname, gp_name) values(%s, %s)",
+                      [form.data['name'], group])
         return HttpResponse("رشته جدید با موفقیت اضافه شد")
 
 
@@ -36,8 +38,10 @@ class NewOl(FormView):
     template_name = 'dbadmin/newOl.html'
 
     def form_valid(self, form):
-        run_query("insert into ol(rname, saghfeoftadan, yr, t_m1, t_m2) values(%s,%s,%s,%s,%s)",
-                  [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'], form.data['t_m2']])
+        run_query(
+            "insert into olympiad(fname, max_fail, year, m1_no, m2_no) values(%s,%s,%s,%s,%s)",
+            [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'],
+             form.data['t_m2']])
         return HttpResponse("المپیاد جدید با موفقیت اضافه شد")
 
 
@@ -47,10 +51,12 @@ class M1M2Date(FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['rname'] = self.request.GET.get('rname')
-        kwargs['yr'] = self.request.GET.get('yr')
+        kwargs['rname'] = self.request.GET.get('fname')
+        kwargs['yr'] = self.request.GET.get('year')
         return kwargs
 
     def form_valid(self, form):
-        run_query("update emtehan set edate=%s where eid=(select eid from m1 where rname=%s and yr=%s)",[form.data['m1_date'],form.data['rname'],form.data['yr']])
+        run_query(
+            "update exam set edate=%s where eid=(select eid from m1 where fname=%s and year=%s)",
+            [form.data['m1_date'], form.data['rname'], form.data['yr']])
         return HttpResponse("اطلاعات با موفقیت به روز شد")

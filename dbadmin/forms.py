@@ -19,7 +19,7 @@ class NewOlForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['feol'] = forms.ChoiceField(
-            choices=[(x['rname'], x['rname']) for x in run_query("select rname from feol", fetch=True)], label='رشته'
+            choices=[(x['fname'], x['fname']) for x in run_query("select fname from Field", fetch=True)], label='رشته'
         )
 
 
@@ -35,10 +35,10 @@ class M1M2DateForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['rname'].initial = rname
         self.fields['yr'].initial = yr
-        self.fields['m1_date'].initial = run_query('select edate from emtehan where eid='
-                                                   '(select eid from m1 where yr=%s and rname=%s)',
+        self.fields['m1_date'].initial = run_query('select edate from exam where eid='
+                                                   '(select eid from m1 where year=%s and fname=%s)',
                                                    [yr, rname], fetch=True)[0]['edate']
-        m2days = run_query('select * from RE natural join emtehan where rname=%s and yr=%s', [rname, yr], fetch=True)
+        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True)
         for m2day in m2days:
-            self.fields['m2_' + m2day['rnum'] + '_date'] = forms.CharField(initial=m2day['date'])
-            self.fields['m2_' + m2day['rnum'] + '_darsad'] = forms.IntegerField(initial=m2day['darsad'])
+            self.fields['m2_' + m2day['num'] + '_date'] = forms.CharField(initial=m2day['date'])
+            self.fields['m2_' + m2day['num'] + '_darsad'] = forms.IntegerField(initial=m2day['percentage'])
