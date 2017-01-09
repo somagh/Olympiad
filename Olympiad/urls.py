@@ -17,10 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from dbadmin.views import newFeol, NewOl, M1M2Date, AddProblemView, EditProblemView, \
-    AddCourseView, EditCourseView, OlympiadView
+    AddCourseView, EditCourseView, OlympiadView, ProblemListView
 
 problem_urlpatterns = [
-    url(r'^$', AddProblemView.as_view(), name='add'),
+    url(r'^$',ProblemListView.as_view(),name='list'),
+    url(r'add/^$', AddProblemView.as_view(), name='add'),
     url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit')
 ]
 

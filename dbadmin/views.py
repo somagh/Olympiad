@@ -137,6 +137,7 @@ class AddCourseView(OlympiadMixin, FormView):
                    data['teacher_id'], data['hourly_wage']])
         return super().form_valid(form)
 
-
+class ProblemListView(OlympiadMixin,TemplateView):
+    pass
 class EditCourseView(OlympiadMixin, FormView):
     pass
