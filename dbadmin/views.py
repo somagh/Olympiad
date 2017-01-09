@@ -2,7 +2,7 @@ from django.http import HttpResponse
 
 from django.views.generic import FormView
 
-from Olympiad.helpers import run_query, OlympiadMixin
+from Olympiad.helpers import run_query
 from dbadmin.forms import NewFeolForm, NewOlForm
 
 

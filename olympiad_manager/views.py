@@ -99,5 +99,23 @@ class AddCourseView(OlympiadMixin, FormView):
                    data['teacher'], data['wage']])
         return super().form_valid(form)
 
+
 class EditCourseView(OlympiadMixin, FormView):
     template_name = 'olympiad/course.html'
+    form_class = CourseForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['fname'] = self.fname
+        kwargs['year'] = self.year
+        self.cname = self.kwargs['cname'].replace('-', ' ')
+        kwargs['cname'] = self.cname
+        return kwargs
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        run_query('update course set cname=%s, minpass=%s, teacher_id=%s, hourly_wage=%s',
+                  [data['name'], data['minpass'], data['teacher'], data['wage']])
+        return super().form_valid(form)
+
+

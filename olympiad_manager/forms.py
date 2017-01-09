@@ -64,3 +64,17 @@ class CourseForm(forms.Form):
     teacher = forms.CharField(label='کد ملی مدرس')
     wage = forms.IntegerField(label='حقوق ساعتی استاد')
 
+    def __init__(self, **kwargs):
+        if 'cname' in kwargs:
+            fname = kwargs.pop('fname')
+            year = kwargs.pop('year')
+            cname = kwargs.pop('cname')
+            super().__init__(**kwargs)
+            course = run_query('select * from course where fname=%s and year=%s and cname=%s',
+                               [fname, year, cname], fetch=True)[0]
+            self.fields['name'].initial = course['cname']
+            self.fields['minpass'].initial = course['minpass']
+            self.fields['teacher'].initial = course['teacher_id']
+            self.fields['wage'].initial = course['hourly_wage']
+        else:
+            super().__init__(**kwargs)
