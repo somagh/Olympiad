@@ -126,4 +126,10 @@ class EditCourseView(OlympiadMixin, FormView):
                   [data['name'], data['minpass'], data['teacher'], data['wage']])
         return super().form_valid(form)
 
+class CourseListView(OlympiadMixin,TemplateView):
+    template_name='olympiad/courses.html'
+    def get_context_data(self, **kwargs):
+        super()
+        kwargs['courses']=run_query('select * from course where fname=%s and year=%s' ,[self.fname,self.year],fetch=True,raise_not_found=False)
+        return kwargs
 
