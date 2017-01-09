@@ -8,7 +8,7 @@ from django.views.generic import FormView
 from django.views.generic import TemplateView
 
 from Olympiad.helpers import run_query
-from dbadmin.forms import NewFeolForm, NewOlForm, M1M2DateForm
+from dbadmin.forms import NewFeolForm, NewOlForm, M1M2DateForm, ProblemForm
 
 
 def test(request):
@@ -59,4 +59,35 @@ class M1M2Date(FormView):
         run_query(
             "update exam set edate=%s where eid=(select eid from m1 where fname=%s and year=%s)",
             [form.data['m1_date'], form.data['rname'], form.data['yr']])
+
         return HttpResponse("اطلاعات با موفقیت به روز شد")
+
+
+class AddProblemView(FormView):
+    template_name = 'dbadmin/problem.html'
+    form_class = ProblemForm
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        run_query('insert into problem(eid, type, score, text, author_id) values(%s, %s, %s, %s, %s)',
+                  [self.kwargs['eid'], data['type'], data['score'], data['text'], data['author']])
+        return HttpResponse('سوال جدید با موفقیت اضافه شد')
+
+
+class EditProblemView(FormView):
+    template_name = 'dbadmin/problem.html'
+    form_class = ProblemForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['eid'] = self.kwargs['eid']
+        kwargs['pnum'] = self.kwargs['pnum']
+        return kwargs
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        run_query('update problem set type=%s, score=%s, text=%s, author_id=%s'
+                  'where eid=%s and pnum=%s',
+                  [data['type'], data['score'], data['text'], data['author'], self.kwargs['eid'],
+                   self.kwargs['pnum']])
+        return HttpResponse('سوال مدنظر با موفقیت به‌روز شد‌')

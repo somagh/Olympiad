@@ -42,3 +42,32 @@ class M1M2DateForm(forms.Form):
         for m2day in m2days:
             self.fields['m2_' + m2day['num'] + '_date'] = forms.CharField(initial=m2day['date'])
             self.fields['m2_' + m2day['num'] + '_darsad'] = forms.IntegerField(initial=m2day['percentage'])
+
+
+class ProblemForm(forms.Form):
+    score = forms.IntegerField(label='نمره')
+    type = forms.BooleanField(label='تستی', required=False)
+    text = forms.CharField(widget=forms.Textarea(), label='متن سوال')
+    author = forms.CharField(initial='044013221') # REMOVE THIS LATER
+
+    def clean(self):
+        data = super().clean()
+        if 'type' in data and data['type'] == True:
+            data['type'] = True
+        else:
+            data['type'] = False
+        return data
+
+    def __init__(self, **kwargs):
+        eid = kwargs.pop('eid')
+        pnum = kwargs.pop('pnum')
+        super().__init__(**kwargs)
+        if not eid or not pnum:
+            return
+
+        problem = run_query('select * from problem where eid=%s and pnum=%s',
+                            [eid, pnum], fetch=True)[0]
+        self.fields['score'].initial = problem['score']
+        self.fields['type'].initial = problem['type']
+        self.fields['text'].initial = problem['text']
+        self.fields['author'].initial = problem['author_id']
