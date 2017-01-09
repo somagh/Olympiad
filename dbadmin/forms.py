@@ -38,7 +38,7 @@ class M1M2DateForm(forms.Form):
         self.fields['m1_date'].initial = run_query('select edate from exam where eid='
                                                    '(select eid from m1 where year=%s and fname=%s)',
                                                    [yr, rname], fetch=True)[0]['edate']
-        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True)
+        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True, raise_not_found=False)
         for m2day in m2days:
             self.fields['m2_' + m2day['num'] + '_date'] = forms.CharField(initial=m2day['date'])
             self.fields['m2_' + m2day['num'] + '_darsad'] = forms.IntegerField(initial=m2day['percentage'])
@@ -48,7 +48,7 @@ class ProblemForm(forms.Form):
     score = forms.IntegerField(label='نمره')
     type = forms.BooleanField(label='تستی', required=False)
     text = forms.CharField(widget=forms.Textarea(), label='متن سوال')
-    author = forms.CharField(initial='044013221') # REMOVE THIS LATER
+    author = forms.CharField(initial='044013221')  # TODO: REMOVE THIS LATER
 
     def clean(self):
         data = super().clean()
@@ -71,3 +71,11 @@ class ProblemForm(forms.Form):
         self.fields['type'].initial = problem['type']
         self.fields['text'].initial = problem['text']
         self.fields['author'].initial = problem['author_id']
+
+
+class CourseForm(forms.Form):
+    name = forms.CharField(label='نام')
+    minpass = forms.CharField(label='حداقل درصد قبولی')
+    teacher = forms.CharField(label='کد ملی مدرس')
+    wage = forms.IntegerField(label='حقوق ساعتی استاد')
+

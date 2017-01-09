@@ -1,5 +1,6 @@
 from django.db import connection
 from django.http.response import Http404
+from django.urls import reverse
 
 
 def run_query(query, params=None, fetch=False, raise_not_found=True):
@@ -11,3 +12,14 @@ def run_query(query, params=None, fetch=False, raise_not_found=True):
         if raise_not_found and len(rows) == 0:
             raise Http404('صفحه مورد نظر یافت نشد')
         return [dict(zip(columns, row)) for row in rows]
+
+
+class OlympiadMixin:
+    def dispatch(self, request, *args, **kwargs):
+        self.fname = kwargs['fname'].replace('-', ' ')
+        self.year = kwargs['year']
+        run_query('select fname from olympiad where fname=%s and year=%s', [self.fname, self.year])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('olympiad:home', args=[self.fname.replace(' ', '-'), self.year])

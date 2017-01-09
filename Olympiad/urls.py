@@ -16,18 +16,25 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from dbadmin.views import test, newFeol, NewOl, M1M2Date, AddProblemView, EditProblemView
+from dbadmin.views import newFeol, NewOl, M1M2Date, AddProblemView, EditProblemView, \
+    AddCourseView, EditCourseView, OlympiadView
 
 problem_urlpatterns = [
-    url(r'^$', AddProblemView.as_view()),
-    url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view())
+    url(r'^$', AddProblemView.as_view(), name='add'),
+    url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit')
+]
+
+olympiad_urlpatterns = [
+    url(r'^$', OlympiadView.as_view(), name='home'),
+    url(r'^course/$', AddCourseView.as_view(), name='add-course'),
+    url(r'^course/(?P<cname>\w+(-\w+)*)/$', EditCourseView.as_view(), name='edit-course'),
+    url(r'^m1m2date/$', M1M2Date.as_view(), name='m1m2date'),
 ]
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^test/$',test),
-    url(r'^new-field/$',newFeol.as_view()),
-    url(r'^new-olympiad/$',NewOl.as_view()),
-    url(r'^m1m2date/$', M1M2Date.as_view()),
-    url(r'^problem/(?P<eid>\d+)/', include(problem_urlpatterns)),
+    url(r'^new-field/$',newFeol.as_view(), name='new-field'),
+    url(r'^new-olympiad/$',NewOl.as_view(), name='new-olympiad'),
+    url(r'^olympiad/(?P<fname>\w+(-\w+)*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
+    url(r'^problem/(?P<eid>\d+)/', include(problem_urlpatterns, namespace='problem')),
 ]

@@ -7,15 +7,8 @@ from django.shortcuts import render
 from django.views.generic import FormView
 from django.views.generic import TemplateView
 
-from Olympiad.helpers import run_query
-from dbadmin.forms import NewFeolForm, NewOlForm, M1M2DateForm, ProblemForm
-
-
-def test(request):
-    cursor = connection.cursor()
-    cursor.execute("select * from feol")
-    columns = [col[0] for col in cursor.description]
-    return HttpResponse([dict(zip(columns, row)) for row in cursor.fetchall()])
+from Olympiad.helpers import run_query, OlympiadMixin
+from dbadmin.forms import NewFeolForm, NewOlForm, M1M2DateForm, ProblemForm, CourseForm
 
 
 class newFeol(FormView):
@@ -45,14 +38,18 @@ class NewOl(FormView):
         return HttpResponse("المپیاد جدید با موفقیت اضافه شد")
 
 
-class M1M2Date(FormView):
+class OlympiadView(OlympiadMixin, TemplateView):
+    template_name = 'dbadmin/olympiad.html'
+
+
+class M1M2Date(OlympiadMixin, FormView):
     template_name = 'dbadmin/m1m2date.html'
     form_class = M1M2DateForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['rname'] = self.request.GET.get('fname')
-        kwargs['yr'] = self.request.GET.get('year')
+        kwargs['rname'] = self.fname
+        kwargs['yr'] = self.year
         return kwargs
 
     def form_valid(self, form):
@@ -60,10 +57,10 @@ class M1M2Date(FormView):
             "update exam set edate=%s where eid=(select eid from m1 where fname=%s and year=%s)",
             [form.data['m1_date'], form.data['rname'], form.data['yr']])
 
-        return HttpResponse("اطلاعات با موفقیت به روز شد")
+        return super().form_valid(form)
 
 
-class AddProblemView(FormView):
+class AddProblemView(OlympiadMixin, FormView):
     template_name = 'dbadmin/problem.html'
     form_class = ProblemForm
 
@@ -71,10 +68,10 @@ class AddProblemView(FormView):
         data = form.cleaned_data
         run_query('insert into problem(eid, type, score, text, author_id) values(%s, %s, %s, %s, %s)',
                   [self.kwargs['eid'], data['type'], data['score'], data['text'], data['author']])
-        return HttpResponse('سوال جدید با موفقیت اضافه شد')
+        return super().form_valid(form)
 
 
-class EditProblemView(FormView):
+class EditProblemView(OlympiadMixin, FormView):
     template_name = 'dbadmin/problem.html'
     form_class = ProblemForm
 
@@ -90,4 +87,29 @@ class EditProblemView(FormView):
                   'where eid=%s and pnum=%s',
                   [data['type'], data['score'], data['text'], data['author'], self.kwargs['eid'],
                    self.kwargs['pnum']])
-        return HttpResponse('سوال مدنظر با موفقیت به‌روز شد‌')
+        return super().form_valid(form)
+
+
+class AddCourseView(OlympiadMixin, FormView):
+    template_name = 'dbadmin/course.html'
+    form_class = CourseForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        self.fname = self.kwargs['fname'].replace('-', ' ')
+        self.year = self.kwargs['year']
+        kwargs['fname'] = self.fname
+        kwargs['year'] = self.year
+        return kwargs
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        run_query('insert into course(fname, year, cname, minpass, teacher_id, hourly_wage) '
+                  'values(%s, %s, %s, %s, %s, %s)',
+                  [self.fname, self.year, data['cname'], data['minpass'],
+                   data['teacher_id'], data['hourly_wage']])
+        return super().form_valid(form)
+
+
+class EditCourseView(OlympiadMixin, FormView):
+    pass
