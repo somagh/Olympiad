@@ -84,8 +84,11 @@ class EditProblemView(OlympiadMixin, FormView):
 
 
 class ProblemListView(OlympiadMixin,TemplateView):
-    pass
-
+    template_name='olympiad/problems.html'
+    def get_context_data(self, **kwargs):
+        super()
+        kwargs['problems']=run_query('select * from problem where eid=%s order by pnum',[kwargs['eid']],fetch=True)
+        return kwargs
 
 class AddCourseView(OlympiadMixin, FormView):
     template_name = 'olympiad/course.html'

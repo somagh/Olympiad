@@ -25,3 +25,4 @@ urlpatterns = [
     url(r'^new-olympiad/$',NewOl.as_view(), name='new-olympiad'),
     url(r'^olympiad/(?P<fname>\w+(-\w+)*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
 ]
+
