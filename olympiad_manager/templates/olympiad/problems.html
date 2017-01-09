@@ -2,12 +2,25 @@
 
 {% block title %}امتحان{% endblock %}
 {% block content%}
-    <a href="{% url 'olympiad:problem:add' fname year eid %}"><button>سوال جدید</button></a>
+    <table>
+        <thead>
+        <th>شماره</th>
+        <th>متن سوال</th>
+        <th>نمره</th>
+        <th>طراح</th>
+        </thead>
     {% for problem in problems %}
-        <div>
+        <tr>
+            <td>
             <a href="{% url 'olympiad:problem:edit' fname year eid problem.pnum%}">
                 {{ forloop.counter }}
             </a>
-        </div>
+            </td>
+            <td>{{problem.text}}</td>
+            <td>{{problem.score}}</td>
+            <td>{{problem.name}}</td>
+        </tr>
     {% endfor %}
+    </table>
+    <a href="{% url 'olympiad:problem:add' fname year eid %}"><button>سوال جدید</button></a>
 {% endblock %}

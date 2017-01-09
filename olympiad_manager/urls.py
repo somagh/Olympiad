@@ -4,7 +4,7 @@ from olympiad_manager.views import ProblemListView, AddProblemView, EditProblemV
     EditCourseView, OlympiadView, M1M2Date
 
 problem_urlpatterns = [
-    url(r'^$',ProblemListView.as_view(),name='list'),
+    url(r'^$', ProblemListView.as_view(), name='list'),
     url(r'^add/$', AddProblemView.as_view(), name='add'),
     url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit')
 ]
