@@ -10,7 +10,8 @@ class CourseListView(OlympiadMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         super()
-        kwargs['courses'] = run_query('select * from course where fname=%s and year=%s '
+        kwargs['courses'] = run_query('select * from course join human on teacher_id=national_code '
+                                      'where fname=%s and year=%s '
                                       'order by cname',
                                       [self.fname, self.year], fetch=True, raise_not_found=False)
         return kwargs

@@ -19,9 +19,6 @@ class M1M2DateForm(forms.Form):
         self.fields['m1_date'].initial = run_query('select edate from exam where eid='
                                                    '(select eid from m1 where year=%s and fname=%s)',
                                                    [yr, rname], fetch=True, raise_not_found=False)[0]['edate']
-        self.fields['m1_eid'].initial = run_query('select eid from exam where eid='
-                                                   '(select eid from m1 where year=%s and fname=%s)',
-                                                   [yr, rname], fetch=True, raise_not_found=False)[0]['eid']
         m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True, raise_not_found=False)
         self.fields['m2_day_count'].initial = len(m2days)
         for m2day in m2days:

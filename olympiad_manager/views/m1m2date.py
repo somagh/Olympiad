@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views.generic import FormView
 
 from Olympiad.helpers import run_query, OlympiadMixin
@@ -18,11 +19,16 @@ class M1M2Date(OlympiadMixin, FormView):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        kwargs=super().get_context_data(**kwargs)
-        kwargs['int_list']=[i for i in range(run_query('select count(*) from examday where fname=%s and year=%s', [self.fname, self.year], fetch=True, raise_not_found=False)[0]['count'])]
-        kwargs['fname']=self.fname
-        kwargs['year']=self.year
+        kwargs = super().get_context_data(**kwargs)
+        kwargs['int_list'] = [i for i in range(
+            run_query('select count(*) from examday where fname=%s and year=%s',
+                      [self.fname, self.year], fetch=True, raise_not_found=False)[0]['count'])]
+        kwargs['fname'] = self.fname
+        kwargs['year'] = self.year
         return kwargs
+
+    def get_success_url(self):
+        return reverse('olympiad:home', args=[self.fname, self.year])
 
     def form_valid(self, form):
         print("salam")
