@@ -3,7 +3,8 @@
 
 {% block content%}
  <form method="post">
-    {% csrf_token %}
+     <h1>{{title}}</h1>
+     {% csrf_token %}
      {{ form.as_p }}
      <button class="btn btn-success" type="submit">ثبت</button>
      <a href="{% url 'olympiad:summer-camp-exam:list' fname year %}">

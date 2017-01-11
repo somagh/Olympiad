@@ -2,6 +2,7 @@
 
 {% block title %}امتحان{% endblock %}
 {% block content%}
+     <h1>مدیریت کلاس‌ها</h1>
     {% for course in courses %}
         <div>
             <a href="{% url 'olympiad:course:edit' fname year course.cname %}">

@@ -1,0 +1,9 @@
+@font-face{
+    font-family: Yekan;
+    src: url(../fonts/yekan.otf);
+}
+
+*{
+    font-family: Yekan;
+    margin: auto;
+}

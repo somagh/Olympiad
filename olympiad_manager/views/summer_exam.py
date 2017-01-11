@@ -13,7 +13,7 @@ class SummerExamListView(OlympiadMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['exams'] = run_query('select * from SummerCampExam natural join Exam '
-                                     'where fname=%s and year=%s',
+                                     'where fname=%s and year=%s order by eid',
                                      [self.fname, self.year], fetch=True, raise_not_found=False)
         return context
 
@@ -30,6 +30,11 @@ class AddSummerExamView(OlympiadMixin, FormView):
 
     def get_success_url(self):
         return reverse('olympiad:summer-camp-exam:list', args=[self.fname, self.year])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'اضافه کردن آزمون'
+        return context
 
     def form_valid(self, form):
         data = form.cleaned_data
@@ -52,6 +57,11 @@ class EditSummerExamView(OlympiadMixin, FormView):
         kwargs['year'] = self.year
         kwargs['eid'] = self.kwargs['eid']
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ویرایش آزمون'
+        return context
 
     def get_success_url(self):
         return reverse('olympiad:summer-camp-exam:list', args=[self.fname, self.year])

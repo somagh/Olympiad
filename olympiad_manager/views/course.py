@@ -10,7 +10,8 @@ class CourseListView(OlympiadMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         super()
-        kwargs['courses'] = run_query('select * from course where fname=%s and year=%s',
+        kwargs['courses'] = run_query('select * from course where fname=%s and year=%s '
+                                      'order by cname',
                                       [self.fname, self.year], fetch=True, raise_not_found=False)
         return kwargs
 
@@ -21,6 +22,11 @@ class AddCourseView(OlympiadMixin, FormView):
 
     def get_success_url(self):
         return reverse('olympiad:course:list', args=[self.fname, self.year])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'اضافه کردن کلاس'
+        return context
 
     def form_valid(self, form):
         data = form.cleaned_data
@@ -41,6 +47,11 @@ class EditCourseView(OlympiadMixin, FormView):
                    [self.fname, self.year, self.kwargs['cname']], fetch=True)[0]
         kwargs['course'] = self.course
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ویرایش کلاس'
+        return context
 
     def get_success_url(self):
         return reverse('olympiad:course:list', args=[self.fname, self.year])

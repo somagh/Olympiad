@@ -31,6 +31,7 @@ class AddProblemView(OlympiadMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['eid'] = self.kwargs['eid']
+        context['title'] = 'اضافه کردن سوال'
         return context
 
     def get_success_url(self):
@@ -51,6 +52,7 @@ class EditProblemView(OlympiadMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['eid'] = self.kwargs['eid']
+        context['title'] = 'ویرایش سوال'
         return context
 
     def get_success_url(self):
