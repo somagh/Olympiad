@@ -16,6 +16,7 @@ class NewOlForm(forms.Form):
     saghf = forms.IntegerField(label='سقف افتادن')
     t_m1 = forms.IntegerField(label='تعداد قبولی مرحله اول')
     t_m2 = forms.IntegerField(label='تعداد قبولی مرحله دوم')
+    manager = forms.CharField(label='کد ملی مدیر المپیاد', max_length=10)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

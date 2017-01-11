@@ -18,7 +18,8 @@ class OlympiadMixin:
     def dispatch(self, request, *args, **kwargs):
         self.fname = kwargs['fname']
         self.year = kwargs['year']
-        run_query('select fname from olympiad where fname=%s and year=%s', [self.fname, self.year])
+        run_query('select fname from olympiad where fname=%s and year=%s and manager=%s',
+                  [self.fname, self.year, request.session['user']['national_code']], fetch=True)
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):

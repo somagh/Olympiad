@@ -29,9 +29,9 @@ class NewOl(FormView):
     def form_valid(self, form):
         print(self.request.session['user'])
         run_query(
-            "insert into olympiad(fname, max_fail, year, m1_no, m2_no) values(%s,%s,%s,%s,%s)",
+            "insert into olympiad(fname, max_fail, year, m1_no, m2_no, manager) values(%s,%s,%s,%s,%s,%s)",
             [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'],
-             form.data['t_m2']])
+             form.data['t_m2'], form.data['manager']])
         return HttpResponse("المپیاد جدید با موفقیت اضافه شد")
 
 
