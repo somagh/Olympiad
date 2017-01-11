@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+    {% block title %}ورود به سایت{% endblock %}
+{% block content %}
+    <h1>ورود به سامانه ملی المپیاد های علمی</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-success">ورود</button>
+    </form>
+{% endblock %}

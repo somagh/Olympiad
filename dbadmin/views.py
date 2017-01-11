@@ -1,9 +1,10 @@
 from django.http import HttpResponse
+from django.urls import reverse
 
 from django.views.generic import FormView
 
 from Olympiad.helpers import run_query
-from dbadmin.forms import NewFeolForm, NewOlForm
+from dbadmin.forms import NewFeolForm, NewOlForm, RegisterForm, LoginForm
 
 
 class newFeol(FormView):
@@ -31,5 +32,25 @@ class NewOl(FormView):
             [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'],
              form.data['t_m2']])
         return HttpResponse("المپیاد جدید با موفقیت اضافه شد")
+
+
+class RegisterView(FormView):
+    template_name = 'dbadmin/register.html'
+    form_class = RegisterForm
+
+    def get_success_url(self):
+        return reverse('dbadmin:successful-signup')
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        run_query('insert into human(national_code, name, password) values (%s, %s, %s)',
+                  [data['national_code'], data['name'], data['password']])
+        return super().form_valid(form)
+
+
+class LoginView(FormView):
+    template_name = 'dbadmin/login.html'
+    form_class = LoginForm
+
 
 
