@@ -45,7 +45,7 @@ class EditCourseView(OlympiadMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         self.course = run_query('select * from course where fname=%s and year=%s and cname=%s',
-                   [self.fname, self.year, self.kwargs['cname']], fetch=True)[0]
+                                [self.fname, self.year, self.kwargs['cname']], fetch=True)[0]
         kwargs['course'] = self.course
         return kwargs
 
@@ -61,5 +61,6 @@ class EditCourseView(OlympiadMixin, FormView):
         data = form.cleaned_data
         run_query('update course set cname=%s, minpass=%s, teacher_id=%s, hourly_wage=%s '
                   'where fname=%s and year=%s and cname=%s',
-                  [data['name'], data['minpass'], data['teacher'], data['wage'], self.fname, self.year, self.course['cname']])
+                  [data['name'], data['minpass'], data['teacher'], data['wage'], self.fname,
+                   self.year, self.course['cname']])
         return super().form_valid(form)

@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.urls import reverse
 from django.views.generic import FormView
 
 from Olympiad.helpers import run_query, OlympiadMixin
@@ -17,6 +18,9 @@ class M1M2Date(OlympiadMixin, FormView):
         kwargs['rname'] = self.fname
         kwargs['yr'] = self.year
         return kwargs
+
+    def get_success_url(self):
+        return reverse('olympiad:home', args=[self.fname, self.year])
 
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
