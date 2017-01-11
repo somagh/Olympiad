@@ -48,7 +48,7 @@ class LoginForm(forms.Form):
 
     def clean(self):
         data = super().clean()
-        user = run_query('select * from human where national_code=%s and password=%s',
+        user = run_query('select national_code, name from human where national_code=%s and password=%s',
                   [data.get('national_code'), data.get('password')], fetch=True, raise_not_found=False)
         if len(user) == 0:
             raise ValidationError('نام کاربری یا رمز عبور نادرست است')

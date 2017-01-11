@@ -27,6 +27,7 @@ class NewOl(FormView):
     template_name = 'dbadmin/newOl.html'
 
     def form_valid(self, form):
+        print(self.request.session['user'])
         run_query(
             "insert into olympiad(fname, max_fail, year, m1_no, m2_no) values(%s,%s,%s,%s,%s)",
             [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'],
@@ -52,5 +53,8 @@ class LoginView(FormView):
     template_name = 'dbadmin/login.html'
     form_class = LoginForm
 
-
+    def form_valid(self, form):
+        user = form.cleaned_data['user']
+        self.request.session['user'] = user
+        return HttpResponse('success')
 
