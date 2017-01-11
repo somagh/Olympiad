@@ -4,7 +4,6 @@ from Olympiad.helpers import run_query
 
 
 class M1M2DateForm(forms.Form):
-
     rname = forms.CharField(widget=forms.HiddenInput())
     yr = forms.IntegerField(widget=forms.HiddenInput())
     m2_day_count = forms.IntegerField(widget=forms.HiddenInput())
@@ -18,12 +17,16 @@ class M1M2DateForm(forms.Form):
         self.fields['yr'].initial = yr
         self.fields['m1_date'].initial = run_query('select edate from exam where eid='
                                                    '(select eid from m1 where year=%s and fname=%s)',
-                                                   [yr, rname], fetch=True, raise_not_found=False)[0]['edate']
-        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True, raise_not_found=False)
+                                                   [yr, rname], fetch=True, raise_not_found=False)[
+            0]['edate']
+        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s',
+                           [rname, yr], fetch=True, raise_not_found=False)
         self.fields['m2_day_count'].initial = len(m2days)
         for m2day in m2days:
-            self.fields['m2_' + str(m2day['num']) + '_date'] = forms.CharField(initial=m2day['edate'],label="تاریخ",required=False)
-            self.fields['m2_' + str(m2day['num']) + '_darsad'] = forms.IntegerField(initial=m2day['percentage'],label="درصد تاثیر",required=False)
+            self.fields['m2_' + str(m2day['num']) + '_date'] = forms.CharField(
+                initial=m2day['edate'], label="تاریخ", required=False)
+            self.fields['m2_' + str(m2day['num']) + '_darsad'] = forms.IntegerField(
+                initial=m2day['percentage'], label="درصد تاثیر", required=False)
 
 
 class ProblemForm(forms.Form):
@@ -40,22 +43,15 @@ class ProblemForm(forms.Form):
             data['type'] = False
         return data
 
-    def __init__(self, **kwargs):
-        if 'eid' in kwargs and 'pnum' in kwargs:
-            eid = kwargs.pop('eid')
-            pnum = kwargs.pop('pnum')
-        else:
-            super().__init__(**kwargs)
-            return
-
+    def __init__(self, eid=None, pnum=None, **kwargs):
         super().__init__(**kwargs)
-
-        problem = run_query('select * from problem where eid=%s and pnum=%s',
-                            [eid, pnum], fetch=True)[0]
-        self.fields['score'].initial = problem['score']
-        self.fields['type'].initial = problem['type']
-        self.fields['text'].initial = problem['text']
-        self.fields['author'].initial = problem['author_id']
+        if eid is not None:
+            problem = run_query('select * from problem where eid=%s and pnum=%s',
+                                [eid, pnum], fetch=True)[0]
+            self.fields['score'].initial = problem['score']
+            self.fields['type'].initial = problem['type']
+            self.fields['text'].initial = problem['text']
+            self.fields['author'].initial = problem['author_id']
 
 
 class CourseForm(forms.Form):
@@ -64,17 +60,40 @@ class CourseForm(forms.Form):
     teacher = forms.CharField(label='کد ملی مدرس')
     wage = forms.IntegerField(label='حقوق ساعتی استاد')
 
-    def __init__(self, **kwargs):
-        if 'cname' in kwargs:
-            fname = kwargs.pop('fname')
-            year = kwargs.pop('year')
-            cname = kwargs.pop('cname')
-            super().__init__(**kwargs)
-            course = run_query('select * from course where fname=%s and year=%s and cname=%s',
-                               [fname, year, cname], fetch=True)[0]
+    def __init__(self, course=None, **kwargs):
+        super().__init__(**kwargs)
+        if course:
             self.fields['name'].initial = course['cname']
             self.fields['minpass'].initial = course['minpass']
             self.fields['teacher'].initial = course['teacher_id']
             self.fields['wage'].initial = course['hourly_wage']
-        else:
-            super().__init__(**kwargs)
+
+
+class SummerExamForm(forms.Form):
+    name = forms.CharField(label='نام آزمون')
+    percentage = forms.IntegerField(label='درصد تاثیر')
+    course = forms.ChoiceField(label='مربوط به درس', required=False, help_text='اگر این امتحان مربوط به درس خاصی '
+                               'است، درس مربوطه را انتخاب کنید')
+    date = forms.CharField(label='تاریخ برگزاری')
+
+    def __init__(self, fname=None, year=None, eid=None, **kwargs):
+        super().__init__(**kwargs)
+        self.fields['course'].choices = [(None, '----')] + [
+            (c['cname'], c['cname']) for c in run_query('select cname from course '
+                                                        'where fname=%s and year=%s',
+                               [fname, year], fetch=True, raise_not_found=False)
+        ]
+
+        if eid:
+            exam = run_query('select * from SummerCampExam natural join Exam where eid=%s', [eid],
+                             fetch=True)[0]
+            self.fields['name'].initial = exam['name']
+            self.fields['percentage'].initial = exam['percentage']
+            self.fields['course'].initial = exam['cname'] if exam['cname'] is not None else '----'
+            self.fields['date'].initial = exam['edate']
+
+    def clean(self):
+        data = super().clean()
+        if not data['course']:
+            data['course'] = None
+        return data

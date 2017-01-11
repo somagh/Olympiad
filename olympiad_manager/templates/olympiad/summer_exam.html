@@ -1,4 +1,4 @@
-{% extends  "base.html" %}
+{% extends "base.html" %}
 {% load static%}
 
 {% block content%}
@@ -6,8 +6,9 @@
     {% csrf_token %}
      {{ form.as_p }}
      <button class="btn btn-success" type="submit">ثبت</button>
-     <a href="{% url 'olympiad:problem:list' fname year eid %}">
+     <a href="{% url 'olympiad:summer-camp-exam:list' fname year %}">
         <button class="btn btn-primary" type="button">بازگشت</button>
      </a>
+
  </form>
 {% endblock %}

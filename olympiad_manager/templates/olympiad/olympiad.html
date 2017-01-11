@@ -3,6 +3,9 @@
     {% block title %} المپیاد {{fname}} {{year}}{% endblock %}
 {% block content %}
        <a href="{% url 'olympiad:m1m2date' fname year %}">تاریخ مرحله اول و دوم</a>
-       <a href="{% url 'olympiad:course:add' fname year %}">مدیریت دروس دوره تابستانی</a>
+       <br>
+       <a href="{% url 'olympiad:course:list' fname year %}">مدیریت دروس دوره تابستانی</a>
+       <br>
+       <a href="{% url 'olympiad:summer-camp-exam:list' fname year %}">مدیریت آزمون‌های دوره تابستانی</a>
 {% endblock %}
 

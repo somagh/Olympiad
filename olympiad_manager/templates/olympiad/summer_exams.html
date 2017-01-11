@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+مدیریت آزمون‌های دوره تابستانی
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+            <th>نام آزمون</th>
+            <th>تاریخ برگزاری</th>
+            <th>درصد تاثیر</th>
+            <th>درس</th>
+            <th>اقدامات</th>
+        </thead>
+        <tbody>
+            {% for exam in exams %}
+                <tr>
+                    <td><a href="{% url 'olympiad:summer-camp-exam:edit' fname year exam.eid %}">{{exam.name}}</a></td>
+                    <td>{{exam.edate}}</td>
+                    <td>{{exam.percentage}}</td>
+                    <td>{% if exam.cname is None %}
+                            ----
+                        {% else %}
+                            {{exam.cname}}
+                        {% endif%}
+                    </td>
+                    <td>
+                        <a href="{% url 'olympiad:problem:list' fname year exam.eid %}"><button class="btn btn-default">مدیریت سوالات</button></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'olympiad:summer-camp-exam:add' fname year %}">
+        <button class="btn btn-success" type="button">اضافه کردن یک‌ آزمون جدید</button>
+    </a>
+    <a href="{% url 'olympiad:home' fname year %}">
+        <button class="btn btn-primary" type="button">بازگشت</button>
+    </a>
+{% endblock %}
