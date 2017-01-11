@@ -12,6 +12,10 @@
     <h1>مرحله اول و دوم </h1>
  <form method="post" class="form-horizontal">
      {% csrf_token %}
+        {{ form.m1_eid }}
+        {{ form.m2_day_count }}
+        {{ form.rname }}
+        {{ form.yr }}
      <h3>مرحله اول</h3>
      <div class="form-group">
         <div class="col-sm-1">
@@ -26,12 +30,13 @@
          {% if forloop.counter0 > 4 %}
              {% if forloop.counter|divisibleby:3 %}
                  <div class="row">
-                     <label for="id_m2_{{ forloop.counter0 }}_date" class="col-sm-1">تاریخ:</label>
-                     <input class="col-sm-3 form-control" id="id_m2_{{ forloop.counter0 }}_date" name="m2_{{ forloop.counter0 }}_date" type="text" value="{{ i.value }}"/>
+                     <label for="id_m2_{% widthratio forloop.counter|add:-7 3 1 %}_date" class="col-sm-1">تاریخ:</label>
+                     <input class="col-sm-3 form-control" id="id_m2_{% widthratio forloop.counter|add:-10 3 1 %}_date" name="m2_{% widthratio forloop.counter|add:-7 3 1 %}_date" type="text" value="{{ i.value }}"/>
              {% elif forloop.counter0|divisibleby:3 %}
-                     <label for="id_m2_{{ forloop.counter0 }}_darsad" class="col-sm-1">درصد تاثیر:</label>
-                     <input class="col-sm-3 form-control" id="id_m2_{{ forloop.counter0 }}_darsad" name="m2_{{ forloop.counter0 }}_darsad" type="number" value="{{ i.value }}"/>
+                     <label for="id_m2_{% widthratio forloop.counter|add:-7 3 1 %}_darsad" class="col-sm-1">درصد تاثیر:</label>
+                     <input class="col-sm-3 form-control" id="id_m2_{% widthratio forloop.counter|add:-7 3 1 %}_darsad" name="m2_{% widthratio forloop.counter|add:-7 3 1 %}_darsad" type="number" value="{{ i.value }}"/>
              {% else %}
+                     {{ i }}
                      <button type="button" class="btn btn-default col-sm-offset-1" onclick="location.href='{% url 'olympiad:problem:list' fname year i.value %}'">مدیریت سوال ها</button>
                  </div>
                 {% endif %}

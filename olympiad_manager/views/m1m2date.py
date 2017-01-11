@@ -8,6 +8,9 @@ class M1M2Date(OlympiadMixin, FormView):
     template_name = 'olympiad/m1m2date.html'
     form_class = M1M2DateForm
 
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['rname'] = self.fname
@@ -22,6 +25,7 @@ class M1M2Date(OlympiadMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
+        print("salam")
         run_query(
             "update exam set edate=%s where eid=(select eid from m1 where fname=%s and year=%s)",
             [form.data['m1_date'], form.data['rname'], form.data['yr']])

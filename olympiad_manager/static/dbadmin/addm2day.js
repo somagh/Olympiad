@@ -5,7 +5,7 @@ $(document).ready(function(){
         $("#m2days").append('<div class="row">' +
                                 '<label for="id_m2_'+dayNum+'_date" class="col-sm-1">تاریخ:</label>'+
                                 '<input id="id_m2_'+dayNum+'_date" class="col-sm-3 form-control" name="m2_'+dayNum+'_date" type="text"/>' +
-                                '<label for="id_m2_'+dayNum+'_darsad" class="col-sm-2">درصد تاثیر:</label>'+
+                                '<label for="id_m2_'+dayNum+'_darsad" class="col-sm-1">درصد تاثیر:</label>'+
                                 '<input id="id_m2_'+dayNum+'_darsad" class="col-sm-3 form-control" name="m2_'+dayNum+'_darsad" type="number"/>' +
                             '</div>');
         dayNum++;
