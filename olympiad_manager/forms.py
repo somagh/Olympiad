@@ -7,7 +7,8 @@ class M1M2DateForm(forms.Form):
     rname = forms.CharField(widget=forms.HiddenInput())
     yr = forms.IntegerField(widget=forms.HiddenInput())
     m2_day_count = forms.IntegerField(widget=forms.HiddenInput())
-    m1_date = forms.CharField(label="تاریخ مرحله اول")
+    m1_date = forms.CharField(label="تاریخ")
+    m1_eid=forms.IntegerField(widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
         rname = kwargs.pop('rname')
@@ -17,16 +18,16 @@ class M1M2DateForm(forms.Form):
         self.fields['yr'].initial = yr
         self.fields['m1_date'].initial = run_query('select edate from exam where eid='
                                                    '(select eid from m1 where year=%s and fname=%s)',
-                                                   [yr, rname], fetch=True, raise_not_found=False)[
-            0]['edate']
-        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s',
-                           [rname, yr], fetch=True, raise_not_found=False)
+                                                   [yr, rname], fetch=True, raise_not_found=False)[0]['edate']
+        self.fields['m1_eid'].initial = run_query('select eid from exam where eid='
+                                                   '(select eid from m1 where year=%s and fname=%s)',
+                                                   [yr, rname], fetch=True, raise_not_found=False)[0]['eid']
+        m2days = run_query('select * from examday natural join exam where fname=%s and year=%s', [rname, yr], fetch=True, raise_not_found=False)
         self.fields['m2_day_count'].initial = len(m2days)
         for m2day in m2days:
-            self.fields['m2_' + str(m2day['num']) + '_date'] = forms.CharField(
-                initial=m2day['edate'], label="تاریخ", required=False)
-            self.fields['m2_' + str(m2day['num']) + '_darsad'] = forms.IntegerField(
-                initial=m2day['percentage'], label="درصد تاثیر", required=False)
+            self.fields['m2_' + str(m2day['num']) + '_date'] = forms.CharField(initial=m2day['edate'],label="تاریخ",required=False)
+            self.fields['m2_' + str(m2day['num']) + '_darsad'] = forms.IntegerField(initial=m2day['percentage'],label="درصد تاثیر",required=False)
+            self.fields['m2_'+str(m2day['num'])+'_eid']=forms.IntegerField(widget=forms.HiddenInput(),initial=m2day['eid'])
 
 
 class ProblemForm(forms.Form):

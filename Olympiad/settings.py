@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'scholar',
     'dbadmin',
     'olympiad_manager',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
