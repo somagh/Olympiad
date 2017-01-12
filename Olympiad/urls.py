@@ -20,9 +20,7 @@ from dbadmin.views import newFeol, NewOl
 from olympiad_manager.urls import olympiad_urlpatterns
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^new-field/$',newFeol.as_view(), name='new-field'),
-    url(r'^new-olympiad/$',NewOl.as_view(), name='new-olympiad'),
-    url(r'^olympiad/(?P<fname>\w+(-\w+)*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
+    url(r'^olympiad/(?P<fname>[^/]*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
+    url(r'^', include('dbadmin.urls', namespace='dbadmin')),
 ]
 

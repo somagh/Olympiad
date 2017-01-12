@@ -16,10 +16,17 @@ def run_query(query, params=None, fetch=False, raise_not_found=True):
 
 class OlympiadMixin:
     def dispatch(self, request, *args, **kwargs):
-        self.fname = kwargs['fname'].replace('-', ' ')
+        self.fname = kwargs['fname']
         self.year = kwargs['year']
-        run_query('select fname from olympiad where fname=%s and year=%s', [self.fname, self.year])
+        run_query('select fname from olympiad where fname=%s and year=%s and manager=%s',
+                  [self.fname, self.year, request.session['user']['national_code']], fetch=True)
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('olympiad:home', args=[self.fname.replace(' ', '-'), self.year])
+        return reverse('olympiad:home', args=[self.fname, self.year])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fname'] = self.fname
+        context['year'] = self.year
+        return context

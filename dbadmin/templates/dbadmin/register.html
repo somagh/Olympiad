@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+    {% block title %}ثبت نام در سایت{% endblock %}
+{% block content %}
+    <h1>ثبت نام در سامانه ملی المپیاد های علمی</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-success">ثبت</button>
+    </form>
+{% endblock %}

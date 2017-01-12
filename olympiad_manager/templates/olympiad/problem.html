@@ -3,8 +3,12 @@
 
 {% block content%}
  <form method="post">
+     <h1>{{title}}</h1>
     {% csrf_token %}
      {{ form.as_p }}
-     <button type="submit">ثبت</button>
+     <button class="btn btn-success" type="submit">ثبت</button>
+     <a href="{% url 'olympiad:problem:list' fname year eid %}">
+        <button class="btn btn-primary" type="button">بازگشت</button>
+     </a>
  </form>
 {% endblock %}
