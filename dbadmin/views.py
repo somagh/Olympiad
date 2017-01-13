@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from Olympiad.helpers import run_query
-from dbadmin.forms import NewFeolForm, NewOlForm, RegisterForm, LoginForm
+from dbadmin.forms import NewFeolForm, NewOlForm, RegisterForm, LoginForm , NewUniversityfieldForm
 
 
 class newFeol(FormView):
@@ -57,4 +57,14 @@ class LoginView(FormView):
         user = form.cleaned_data['user']
         self.request.session['user'] = user
         return HttpResponse('success')
+
+class newUniversityfield(FormView):
+    template_name = 'dbadmin/newUniversityfield.html'
+    form_class = NewUniversityfieldForm
+
+    def form_valid(self, form):
+        run_query("insert into universityfield(id, gp_name, min_level, olympiad_capacity) values(%s,%s,%s,%s)",
+                  [form.data['id'], form.data['group_name'],
+                   form.data['min_level'], form.data['olympiad_capacity']])
+        return HttpResponse("رشته دانشگاهی جدید با موفقیت اضافه شد")
 

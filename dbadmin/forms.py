@@ -55,3 +55,9 @@ class LoginForm(forms.Form):
             raise ValidationError('نام کاربری یا رمز عبور نادرست است')
         data['user'] = user[0]
         return data
+
+class NewUniversityfieldForm(forms.Form):
+    id = forms.IntegerField(label='کد رشته محل')
+    min_level = forms.IntegerField(label='حداقل تراز قبولی')
+    olympiad_capacity = forms.IntegerField(label='حداکثر المپیادی')
+    group_name = forms.CharField(label='گروه')
