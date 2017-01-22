@@ -43,14 +43,14 @@
 								<i class="fa fa-circle fa-stack-2x"></i>
 								<i class="fa fa-mobile fa-stack-1x fa-inverse"></i>
 							</span>
-							باشگاه<span class="title">دانش‌پژوهان جوان</span>
+                            <span class="title">باشگاه</span>دانش‌پژوهان جوان
 						</a>
 					</div>
 					<div class="collapse navbar-collapse appiNav">
 						<ul class="nav navbar-nav">
 							<li><a href="#featureWrap">Features</a></li>
 							<li><a href="#productWrap">The App</a></li>
-							<li><a href="#pricingWrap">Pricing</a></li>
+							<li><a href="#pricingWrap">مشاهده نتایج</a></li>
 							<li><a href="#testimonialsWrap">Testimonials</a></li>
                             {% if request.session.user %}
                                 <li><a href="{% url 'logout' %}">خروج</a></li>
@@ -180,56 +180,26 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h2 class="sectionTitle">Ready to get started?</h2>
+					<h2 class="sectionTitle">مشاهده نتایج المپیاد‌های علمی</h2>
 				</div>
 			</div>
 			<div class="row">
+            {% for olympiad in olympiads %}
 				<div class="col-sm-4">
 					<ul class="priceTable">
-						<li class="title">Basic Plan</li>
-						<li class="description">For basic people</li>
-						<li class="price">$9.99</li>
+						<li class="title">المپیاد {{olympiad.fname}} {{olympiad.year}}</li>
+						<li class="price">مدیریت: {{olympiad.name}}</li>
 						<ul class="features">
-							<li>Phasellizzle brizzle</li>
-							<li>Crizzle aliquizzle</li>
-							<li>And a lot more gizzle</li>
+							<li>نتایج مرحله اول</li>
+							<li>نتایج مرحله دوم</li>
 						</ul>
 						<li class="call">
-							<a class="btn btn-success btn-lg" href="#">Buy Now</a>
+							<a class="btn btn-success btn-lg" href="#">اسامی مدال آوران</a>
 						</li>
 					</ul>
 				</div>
-				<div class="col-sm-4">
-					<ul class="priceTable alt">
-						<li class="title">Super Plan</li>
-						<li class="description">For super people</li>
-						<li class="price">$19.99</li>
-						<ul class="features">
-							<li>Phasellizzle brizzle</li>
-							<li>Crizzle aliquizzle</li>
-							<li>And a lot more gizzle</li>
-						</ul>
-						<li class="call">
-							<a class="btn btn-success btn-lg" href="#">Buy Now</a>
-						</li>
-					</ul>
-				</div>
-				<div class="col-sm-4">
-					<ul class="priceTable">
-						<li class="title">Awesome Plan</li>
-						<li class="description">For awesome people</li>
-						<li class="price">$29.99</li>
-						<ul class="features">
-							<li>Phasellizzle brizzle</li>
-							<li>Crizzle aliquizzle</li>
-							<li>And a lot more gizzle</li>
-						</ul>
-						<li class="call">
-							<a class="btn btn-success btn-lg" href="#">Buy Now</a>
-						</li>
-					</ul>
-				</div>
-			</div>
+            {% endfor %}
+            </div>
 		</div>
 	</div> <!-- /pricingWrap -->
 	

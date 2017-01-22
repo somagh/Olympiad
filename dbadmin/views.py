@@ -61,6 +61,7 @@ class LoginView(FormView):
         self.request.session['user'] = user
         return super().form_valid(form)
 
+
 class NewUniversityField(FormView):
     template_name = 'dbadmin/newUniversityfield.html'
     form_class = NewUniversityfieldForm
