@@ -1,8 +1,9 @@
+from django.http.response import HttpResponse
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView
 
 from Olympiad.helpers import OlympiadMixin, run_query
-from olympiad_manager.forms import ProblemForm
+from olympiad_manager.forms import ProblemForm, GradeForm
 
 
 class ProblemListView(OlympiadMixin, TemplateView):
@@ -71,3 +72,67 @@ class EditProblemView(OlympiadMixin, FormView):
                   [data['type'], data['score'], data['text'], data['author'], self.kwargs['eid'],
                    self.kwargs['pnum']])
         return super().form_valid(form)
+
+
+class GradeView(FormView):
+    template_name = 'olympiad/grade.html'
+    form_class = GradeForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.eid = self.kwargs['eid']
+        self.user = request.session['user']
+        exam = run_query('select fname, year from m1 where eid=%s', [self.eid], fetch=True,
+                         raise_not_found=False)
+        if len(exam) == 0:
+            exam = run_query('select fname, year from examDay where eid=%s',
+                             [self.eid], fetch=True, raise_not_found=False)
+            if len(exam) == 0:
+                exam = run_query('select fname, year from summercampexam where eid=%s',
+                                 [self.eid], fetch=True, raise_not_found=False)[0]
+                self.scholars = run_query(
+                    'select national_code, name from m2_accepted join human on '
+                    'scholar_id=national_code where fname=%s and year=%s',
+                    [exam['fname'], exam['year']], fetch=True)
+            else:
+                exam = exam[0]
+                self.scholars = run_query(
+                    'select national_code, name from m1_accepted join human on '
+                    'scholar_id=national_code where fname=%s and year=%s',
+                    [exam['fname'], exam['year']], fetch=True)
+        else:
+            exam = exam[0]
+            self.scholars = run_query('select national_code, name from participation natural join '
+                                      'human where fname=%s and year=%s',
+                                      [exam['fname'], exam['year']], fetch=True)
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        for scholar in self.scholars:
+            id = scholar['national_code']
+            score = form.cleaned_data[id]
+            if score == "":
+                run_query('delete from grade where grader_id=%s and scholar_id=%s and eid=%s '
+                          'and pnum=%s', [self.user['national_code'],
+                                          id, self.eid, self.kwargs['pnum']])
+            else:
+                run_query('insert into grade(score, scholar_id, eid, pnum, grader_id) '
+                          'values (%s, %s, %s, %s, %s) on conflict(scholar_id, eid, pnum, '
+                          'grader_id) do update set score=%s',
+                          [score, id, self.eid, self.kwargs['pnum'], self.user['national_code'],
+                           score])
+        return HttpResponse('ok')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['problem'] = run_query('select * from problem where eid=%s and pnum=%s',
+                                       [self.eid, self.kwargs['pnum']], fetch=True)[0]
+        context['scholars'] = self.scholars
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['eid'] = self.eid
+        kwargs['pnum'] = self.kwargs['pnum']
+        kwargs['scholars'] = self.scholars
+        kwargs['grader_id'] = self.user['national_code']
+        return kwargs
