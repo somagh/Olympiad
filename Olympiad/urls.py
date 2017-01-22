@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
 
-from dbadmin.views import newFeol, NewOl
 from olympiad_manager.urls import olympiad_urlpatterns
+from ysc.views import HomeView, LogoutView
 
 urlpatterns = [
     url(r'^olympiad/(?P<fname>[^/]*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
     url(r'^', include('dbadmin.urls', namespace='dbadmin')),
+    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^$', HomeView.as_view(), name='home'),
 ]
 

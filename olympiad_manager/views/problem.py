@@ -1,7 +1,5 @@
-from django.http.response import HttpResponse
 from django.http import HttpResponse
 from django.urls import reverse
-from django.views import View
 from django.views.generic import TemplateView, FormView
 from rest_framework.response import Response
 from rest_framework.views import APIView

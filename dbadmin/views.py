@@ -53,11 +53,13 @@ class LoginView(FormView):
     template_name = 'dbadmin/login.html'
     form_class = LoginForm
 
+    def get_success_url(self):
+        return reverse('home')
+
     def form_valid(self, form):
         user = form.cleaned_data['user']
         self.request.session['user'] = user
-        return HttpResponse('success')
-
+        return super().form_valid(form)
 
 class NewUniversityField(FormView):
     template_name = 'dbadmin/newUniversityfield.html'
