@@ -1,4 +1,5 @@
 from django import forms
+from django.http.response import Http404
 
 from Olympiad.helpers import run_query
 
@@ -101,3 +102,20 @@ class SummerExamForm(forms.Form):
 
 class AddGraderForm(forms.Form):
     pass
+
+
+class GradeForm(forms.Form):
+
+    def __init__(self, eid, pnum, scholars, grader_id, **kwargs):
+        super().__init__(**kwargs)
+        for i, scholar in enumerate(scholars):
+            self.fields[scholar['national_code']] = forms.CharField(label=scholar['name'],
+                                                                    required=False)
+            try:
+                grade = run_query('select score from grade where '
+                                  'scholar_id=%s and eid=%s and grader_id=%s '
+                                  'and pnum=%s', [scholar['national_code'], eid, grader_id, pnum],
+                                  fetch=True)[0]
+                self.fields[scholar['national_code']].initial = grade['score']
+            except Http404:
+                pass

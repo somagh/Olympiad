@@ -5,16 +5,17 @@ from olympiad_manager.views.course import CourseListView
 from olympiad_manager.views.home import OlympiadView
 from olympiad_manager.views.m1m2date import M1M2Date
 from olympiad_manager.views.problem import ProblemListView, AddProblemView, EditProblemView, ManageGraderView, \
-    DeleteGraderView
+    DeleteGraderView,GradeView
 from olympiad_manager.views.summer_exam import SummerExamListView, AddSummerExamView, \
     EditSummerExamView
 
 problem_urlpatterns = [
     url(r'^$', ProblemListView.as_view(), name='list'),
     url(r'^add/$', AddProblemView.as_view(), name='add'),
-    url(r'^(?P<pnum>\d+)/edit/$', EditProblemView.as_view(), name='edit'),
     url(r'^(?P<pnum>\d+)/graders/$',ManageGraderView.as_view(),name='graders'),
     url(r'^(?P<pnum>\d+)/graders/delete/$',DeleteGraderView.as_view())
+    url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit'),
+    url(r'^(?P<pnum>\d+)/grade', GradeView.as_view(), name='grade'),
 ]
 
 course_urlpatterns = [
@@ -28,6 +29,7 @@ summer_exam_urlpatterns = [
     url(r'^add/$', AddSummerExamView.as_view(), name='add'),
     url(r'^(?P<eid>\d+)/$', EditSummerExamView.as_view(), name='edit'),
 ]
+
 
 olympiad_urlpatterns = [
     url(r'^$', OlympiadView.as_view(), name='home'),
