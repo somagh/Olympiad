@@ -4,6 +4,6 @@
 }
 
 *{
-    font-family: Yekan;
+    font-family: Yekan !important;
     margin: auto;
 }
