@@ -18,9 +18,11 @@ from django.contrib import admin
 
 from dbadmin.views import newFeol, NewOl
 from olympiad_manager.urls import olympiad_urlpatterns
+from scholar.views import RegisterOlympiad
 
 urlpatterns = [
     url(r'^olympiad/(?P<fname>[^/]*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
     url(r'^', include('dbadmin.urls', namespace='dbadmin')),
+    url(r'^register-olympiad/$',RegisterOlympiad.as_view(),name='register-olympiad')
 ]
 

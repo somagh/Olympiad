@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static%}
+{% block static %}
+    {{ block.super }}
+    <script src="{% static 'scholar/registed-olympiad.js' %}"></script>
+{% endblock %}
+
+    {% block title %}ثبت نام در المپیاد های علمی{% endblock %}
+{% block content %}
+    <h1>ثبت نام در المپیاد های علمی</h1>
+    <form method="post" id="form">
+        {% csrf_token %}
+        {% for olympiad in registered %}
+            <div>
+                {{ olympiad.fname }} {{ olympiad.year }} &nbsp
+                <span class="label label-info">ثبت نام شده</span>
+            </div>
+        {% endfor %}
+        {% for olympiad in not_registered %}
+            <div>
+                {{ olympiad.fname }} {{ olympiad.year }}
+                <button type="button" class="btn btn-success register" id="{{ forloop.counter }}">ثبت نام</button>
+                <input type="hidden" value="{{olympiad.fname}}" name="fname_{{ forloop.counter }}"/>
+                <input type="hidden" value="{{olympiad.year}}" name="year_{{ forloop.counter }}"/>
+            </div>
+        {% endfor %}
+        {{form.as_p}}
+    </form>
+{% endblock %}
