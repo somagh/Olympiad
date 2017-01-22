@@ -4,14 +4,17 @@ from olympiad_manager.views.course import AddCourseView, EditCourseView
 from olympiad_manager.views.course import CourseListView
 from olympiad_manager.views.home import OlympiadView
 from olympiad_manager.views.m1m2date import M1M2Date
-from olympiad_manager.views.problem import ProblemListView, AddProblemView, EditProblemView
+from olympiad_manager.views.problem import ProblemListView, AddProblemView, EditProblemView, ManageGraderView, \
+    DeleteGraderView
 from olympiad_manager.views.summer_exam import SummerExamListView, AddSummerExamView, \
     EditSummerExamView
 
 problem_urlpatterns = [
     url(r'^$', ProblemListView.as_view(), name='list'),
     url(r'^add/$', AddProblemView.as_view(), name='add'),
-    url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit')
+    url(r'^(?P<pnum>\d+)/edit/$', EditProblemView.as_view(), name='edit'),
+    url(r'^(?P<pnum>\d+)/graders/$',ManageGraderView.as_view(),name='graders'),
+    url(r'^(?P<pnum>\d+)/graders/delete/$',DeleteGraderView.as_view())
 ]
 
 course_urlpatterns = [

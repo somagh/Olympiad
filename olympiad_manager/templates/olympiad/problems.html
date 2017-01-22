@@ -20,6 +20,7 @@
             <td>{{problem.text}}</td>
             <td>{{problem.score}}</td>
             <td>{{problem.name}}</td>
+            <td><button type="button" class="btn btn-default" onclick="location.href='{% url 'olympiad:problem:graders' fname year eid problem.pnum %}'">مدیریت مصححین</button></td>
         </tr>
     {% endfor %}
     </table>

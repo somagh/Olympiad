@@ -3,7 +3,7 @@ from django.http.response import Http404
 from django.urls import reverse
 
 
-def run_query(query, params=None, fetch=False, raise_not_found=True):
+def run_query(query: object, params: object = None, fetch: object = False, raise_not_found: object = True) -> object:
     cursor = connection.cursor()
     cursor.execute(query, params)
     if fetch:

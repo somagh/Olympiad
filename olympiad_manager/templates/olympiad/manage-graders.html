@@ -1,0 +1,33 @@
+{% extends  "base.html" %}
+{% load static%}
+{% load widget_tweaks %}
+{% block static %}
+    {{ block.super }}
+    <script src="{% static 'olympiad_manager/addgrader.js' %}"></script>
+{% endblock %}
+
+{% block title %}مدیریت مصححین{% endblock %}
+{% block content%}
+    <h1>مدیریت مصححین </h1>
+    <form method="post" class="form-horizontal">
+        {% csrf_token%}
+        <input type="hidden" value="{{ year }}" name="year">
+        <input type="hidden" value="{{ fname }}" name="fname">
+        <input type="hidden" value="{{ eid }}" name="eid">
+        <input type="hidden" value="{{ pnum }}" name="pnum">
+        {% for grader in graders %}
+            <div id="grader_{{ forloop.counter }}">
+                {{ grader.name }}
+                <input name="grader_id_{{ forloop.counter }}" value="{{ grader.national_code }}" type="hidden"/>
+                <button type="button" class="btn btn-danger delete" id="{{ forloop.counter }}">حذف</button>
+            </div>
+        {% endfor %}
+        <input type="hidden" name="new_grader_count" value="0">
+        <div id="newgraders">
+        </div>
+        <br>
+        <button class="btn btn-warning" id="add_grader_button" type="button">اضافه کردن مصحح</button>
+        <button class="btn btn-success" type="submit">ثبت</button>
+        <button class="btn btn-primary" onclick="location.href='{% url 'olympiad:problem:list' fname year eid%}'"type="button">بازگشت</button>
+    </form>
+{% endblock %}

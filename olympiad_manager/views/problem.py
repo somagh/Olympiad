@@ -1,8 +1,12 @@
+from django.http import HttpResponse
 from django.urls import reverse
+from django.views import View
 from django.views.generic import TemplateView, FormView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from Olympiad.helpers import OlympiadMixin, run_query
-from olympiad_manager.forms import ProblemForm
+from olympiad_manager.forms import ProblemForm, AddGraderForm
 
 
 class ProblemListView(OlympiadMixin, TemplateView):
@@ -71,3 +75,37 @@ class EditProblemView(OlympiadMixin, FormView):
                   [data['type'], data['score'], data['text'], data['author'], self.kwargs['eid'],
                    self.kwargs['pnum']])
         return super().form_valid(form)
+
+class ManageGraderView(OlympiadMixin,FormView):
+    template_name='olympiad/manage-graders.html'
+    form_class = AddGraderForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.eid = kwargs['eid']
+        self.pnum = kwargs['pnum']
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('olympiad:problem:graders', args=[self.fname, self.year,self.eid,self.pnum])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['graders'] = run_query("select * from grading join human on grader_id=national_code where eid=%s and pnum=%s",[self.eid,self.pnum],fetch=True,raise_not_found=False)
+        context['eid']=self.eid
+        context['pnum']=self.pnum
+        return context
+
+    def form_valid(self,form):
+        data=form.data
+        for i in range(int(data['new_grader_count'])):
+            if form.data['new_code_' + str(i)] == "":
+                continue
+            run_query('insert into grading(grader_id,eid,pnum) values(%s,%s,%s)',[form.data['new_code_' + str(i)],self.eid,self.pnum])
+        return super().form_valid(form)
+
+class DeleteGraderView(APIView):
+    def post(self,request,*args,**kwargs):
+        run_query('delete from grading where eid=%s and pnum=%s and grader_id=%s',[request.POST.get('eid'),request.POST.get('pnum'),request.POST.get('national_code')])
+        return Response()
+
+

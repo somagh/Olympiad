@@ -98,3 +98,6 @@ class SummerExamForm(forms.Form):
         if not data['course']:
             data['course'] = None
         return data
+
+class AddGraderForm(forms.Form):
+    pass
