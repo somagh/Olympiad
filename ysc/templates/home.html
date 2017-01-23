@@ -101,27 +101,22 @@
 	<div id="featureWrap">
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-4 text-center feature">
-					<i class="fa fa-tablet icon"></i>
-					<h3>Responsive Bootstrap Template</h3>
-					<p>
-					Lorem ipsum dolizzle sit tellivizzle, boom shackalack adipiscing elit. Nullam mofo velizzle, get down get down stuff, sure cool, dizzle vizzle, arcu. Yo mamma izzle tortizzle.
-					</p>
+                {% for olympiad in olympiads %}
+                <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'olympiad:home' olympiad.fname olympiad.year %}'">
+					<i class="fa fa-tablet icon" style="font-size: 20px">{{ olympiad.year }} {{ olympiad.fname }}</i>
+                    <h3>مدیریت المپیاد</h3>
 				</div>
-				<div class="col-sm-4 text-center feature">
-					<i class="fa fa-pencil icon"></i>
-					<h3>Easy to Customize</h3>
-					<p>
-					Lorem ipsum dolizzle sit tellivizzle, boom shackalack adipiscing elit. Nullam mofo velizzle, get down get down stuff, sure cool, dizzle vizzle, arcu. Yo mamma izzle tortizzle.
-					</p>
+                {% endfor %}
+                {% if isAdmin %}
+                    <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:new-olympiad' %}'">
+					<i class="fa fa-tablet icon" style="font-size: 20px">المپیاد جدید</i>
+                    <h3>اضافه کردن المپیاد علمی جدید</h3>
 				</div>
-				<div class="col-sm-4 text-center feature">
-					<i class="fa fa-star icon"></i>
-					<h3>Ideal for Apps or Software</h3>
-					<p>
-					Lorem ipsum dolizzle sit tellivizzle, boom shackalack adipiscing elit. Nullam mofo velizzle, get down get down stuff, sure cool, dizzle vizzle, arcu. Yo mamma izzle tortizzle.
-					</p>
+				<div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:new-field' %}'">
+					<i class="fa fa-tablet icon" style="font-size: 20px"> رشته جدید</i>
+                    <h3>اضافه کردن رشته المپیادی</h3>
 				</div>
+                {% endif %}
 			</div>
 		</div>
 	</div> <!-- /featureWrap -->

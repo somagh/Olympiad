@@ -12,7 +12,8 @@ class HomeView(TemplateView):
         context = super().get_context_data()
         self.username = self.request.session.get('user', {}).get('national_code', '')
         context['olympiads'] = run_query('select fname, year, name from olympiad join human on '
-                                         'manager=national_code', fetch=True, raise_not_found=False)
+                                         'manager=national_code', fetch=True)
+        context['isAdmin'] = self.username == "root"
         context['grader_problems'] = run_query('select eid, pnum, text from grading natural join '
                                               'problem where grader_id=%s', [self.username],
                                               fetch=True, raise_not_found=False)

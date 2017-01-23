@@ -34,10 +34,10 @@ class RegisterForm(forms.Form):
 
     def clean(self):
         data = super().clean()
-        if 'password' in dta and 'confirm_password' in data['password'] != data['confirm_password']:
+        if 'password' in data and 'confirm_password' in data['password'] != data['confirm_password']:
             raise ValidationError({'password': 'رمز عبور با تکرار آن مطابقت ندارد'})
         if 'national_code' in data and \
-                        run_queary('select count(*) from human where national_code=%s',
+                        run_query('select count(*) from human where national_code=%s',
                                   [data['national_code']], fetch=True)[0]['count'] > 0:
             raise ValidationError({'national_code': 'کاربر با چنین کد ملی قبلا در سایت ثبت نام شده است'})
         return data
