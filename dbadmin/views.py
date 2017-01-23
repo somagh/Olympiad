@@ -11,6 +11,9 @@ class newFeol(FormView):
     template_name = 'dbadmin/newFeol.html'
     form_class = NewFeolForm
 
+    def get_success_url(self):
+        return reverse('home')
+
     def form_valid(self, form):
         run_query("insert into field(fname, gold_no, silver_no) values(%s,%s,%s)",
                   [form.data['name'], form.data['t_t'],
@@ -19,12 +22,15 @@ class newFeol(FormView):
         for group in groups:
             run_query("insert into groups(fname, gp_name) values(%s, %s)",
                       [form.data['name'], group])
-        return HttpResponse("رشته جدید با موفقیت اضافه شد")
+        return super().form_valid(form)
 
 
 class NewOl(FormView):
     form_class = NewOlForm
     template_name = 'dbadmin/newOl.html'
+
+    def get_success_url(self):
+        return reverse('home')
 
     def form_valid(self, form):
         print(self.request.session['user'])
@@ -32,7 +38,7 @@ class NewOl(FormView):
             "insert into olympiad(fname, max_fail, year, m1_no, m2_no, manager) values(%s,%s,%s,%s,%s,%s)",
             [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'],
              form.data['t_m2'], form.data['manager']])
-        return HttpResponse("المپیاد جدید با موفقیت اضافه شد")
+        return super().form_valid(form)
 
 
 class RegisterView(FormView):
