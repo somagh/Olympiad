@@ -49,9 +49,11 @@
 					<div class="collapse navbar-collapse appiNav">
 						<ul class="nav navbar-nav">
 							<li><a href="#featureWrap">Features</a></li>
-							<li><a href="#productWrap">The App</a></li>
+                            {% if grader_problems %}
+							    <li><a href="#productWrap">سوالات و کلاس‌ها</a></li>
+                            {% endif %}
 							<li><a href="#pricingWrap">مشاهده نتایج</a></li>
-							<li><a href="#testimonialsWrap">Testimonials</a></li>
+							<li><a href="#testimonialsWrap">امور دانش‌پژوهان</a></li>
                             {% if request.session.user %}
                                 <li><a href="{% url 'logout' %}">خروج</a></li>
                                 <li><a style="color: #418bca">{{request.session.user.name}}</a></li>
@@ -123,19 +125,19 @@
 			</div>
 		</div>
 	</div> <!-- /featureWrap -->
-	
+
+    {% if grader_problems %}
 	<div id="productWrap" class="altWrap">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h2 class="sectionTitle">Modern &amp; clean landing page theme</h2>
-					<h3 class="sectionTitle">Lorem ipsum dolizzle sit tellivizzle, boom shackalack adipiscing elit. Nullam mofo velizzle, sure cool.</h3>
+					<h2 class="sectionTitle">مدیریت سوالات و کلاس‌های المپیادی</h2>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-5 col-md-offset-1">
 					<div class="imgWrap">
-						<img class="img-responsive" src="{% static 'assets/img/tablet.png' %}"/>
+						<img class="img-responsive" src="{% static 'assets/img/aa.jpg' %}"/>
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -147,34 +149,23 @@
 							</span>
 						</div>
 						<div class="col-xs-10">
-							<h3>Amazing features</h3>
-							<p>Vestibulum tellivizzle i saw beyonces tizzles and my pizzle went crizzle primis gangsta faucibus fizzle luctizzle izzle stuff posuere mammasay mammasa mamma oo sa Daahng dawg.</p>
-						</div>
+							<h3>سوالاتی که شما مصحح آن‌ها هستید</h3>
+                            {% for problem in grader_problems %}
+							<a href="{% url 'grade' problem.eid problem.pnum %}"><p>{{ problem.text }}</p></a>
+						    {% endfor %}
+                        </div>
 						<div class="col-xs-2 icon">
 							<span class="fa-stack fa-lg">
 							<i class="fa fa-circle fa-stack-2x"></i>
 							<i class="fa fa-cog fa-stack-1x fa-inverse"></i>
 							</span>
 						</div>
-						<div class="col-xs-10">
-							<h3>Fully customizeable</h3>
-							<p>Vestibulum tellivizzle i saw beyonces tizzles and my pizzle went crizzle primis gangsta faucibus fizzle luctizzle izzle stuff posuere mammasay mammasa mamma oo sa Daahng dawg.</p>
-						</div>
-						<div class="col-xs-2 icon">
-							<span class="fa-stack fa-lg">
-							<i class="fa fa-circle fa-stack-2x"></i>
-							<i class="fa fa-bars fa-stack-1x fa-inverse"></i>
-							</span>
-						</div>
-						<div class="col-xs-10">
-							<h3>Clean &amp; functional layout</h3>
-							<p>Vestibulum tellivizzle i saw beyonces tizzles and my pizzle went crizzle primis gangsta faucibus fizzle luctizzle izzle stuff posuere mammasay mammasa mamma oo sa Daahng dawg.</p>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div> <!-- /productWrap -->
+    {% endif %}
 	
 	<div id="pricingWrap">
 		<div class="container">
@@ -207,7 +198,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h2 class="sectionTitle">What people say</h2>
+					<h2 class="sectionTitle">امور دانش‌پژوهان جوان</h2>
 				</div>
 			</div>
 			<div class="row">
@@ -215,17 +206,11 @@
 					<div class="flexslider">
 						<ul class="slides">
 							<li>
-								<div class="quote">"Etizzle laoreet doggy dope nisl. Dang pulvinizzle, ipsizzle dawg."</div>
-								<div class="author">Martin Nizzle</div>
-							</li>
-							<li>
-								<div class="quote">"Crazy tellus urna, yo mamma check out this, eleifend you son of a bizzle."</div>
-								<div class="author">Jennifer Aliquizzle</div>
-							</li>
-							<li>
-								<div class="quote">"Praesent i saw beyonces tizzles and my pizzle went crizzle turpizzle."</div>
-								<div class="author">William Lorizzle</div>
-							</li>
+								<div class="quote">ثبت نام در المپیاد</div>
+								<a href="{% url 'register-olympiad' %}">
+                                    <div class="author"> ثبت نام یا اطلاع از وضعیت ثبت نامی خود در المپیادهای علمی</div>
+							    </a>
+                            </li>
 						</ul>
 					</div>
 				</div>

@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 
 from olympiad_manager.urls import olympiad_urlpatterns
+from olympiad_manager.views.problem import GradeView
 from scholar.views import RegisterOlympiad
 from ysc.views import HomeView, LogoutView
 
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'^', include('dbadmin.urls', namespace='dbadmin')),
     url(r'^register-olympiad/$',RegisterOlympiad.as_view(),name='register-olympiad'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^grade/(?P<eid>\d+)/(?P<pnum>\d+)/$', GradeView.as_view(), name='grade'),
     url(r'^$', HomeView.as_view(), name='home'),
 ]
 

@@ -15,7 +15,6 @@ problem_urlpatterns = [
     url(r'^(?P<pnum>\d+)/graders/$',ManageGraderView.as_view(),name='graders'),
     url(r'^(?P<pnum>\d+)/graders/delete/$',DeleteGraderView.as_view()),
     url(r'^(?P<pnum>\d+)/$', EditProblemView.as_view(), name='edit'),
-    url(r'^(?P<pnum>\d+)/grade', GradeView.as_view(), name='grade'),
 ]
 
 course_urlpatterns = [
