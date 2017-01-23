@@ -12,9 +12,11 @@ class HomeView(TemplateView):
         context = super().get_context_data()
         context['olympiads'] = run_query('select fname, year, name from olympiad join human on '
                                          'manager=national_code', fetch=True)
+        context['isAdmin'] = 'user' in self.request.session and self.request.session['user']['national_code']== "root"
         return context
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
         del request.session['user']
         return HttpResponseRedirect(reverse('home'))
+
