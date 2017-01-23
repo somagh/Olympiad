@@ -48,7 +48,9 @@
 					</div>
 					<div class="collapse navbar-collapse appiNav">
 						<ul class="nav navbar-nav">
+                            {% if my_olympiads or isAdmin %}
 							<li><a href="#featureWrap">مدیریت</a></li>
+                            {% endif %}
                             {% if grader_problems %}
 							    <li><a href="#productWrap">سوالات و کلاس‌ها</a></li>
                             {% endif %}
