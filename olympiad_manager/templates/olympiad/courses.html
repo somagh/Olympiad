@@ -2,7 +2,7 @@
 
 {% block title %}امتحان{% endblock %}
 {% block content%}
-    <table>
+    <table class="table table-hover table-striped">
     <thead>
         <th>نام درس</th>
         <th>نام استاد</th>
@@ -21,7 +21,7 @@
             </tr>
     {% endfor %}
     <tbody>
-    <table>
+    <table class="table table-hover table-striped">
         <a href="{% url 'olympiad:course:add' fname year%}"><button type="button" class="btn btn-success">کلاس جدید</button></a>
     <a href="{% url 'olympiad:home' fname year %}">
         <button class="btn btn-primary" type="button">بازگشت</button>

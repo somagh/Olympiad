@@ -3,12 +3,13 @@
 {% block title %}امتحان{% endblock %}
 {% block content%}
     <h1>مدیریت سوالات</h1>
-    <table>
+    <table class="table table-hover table-striped">
         <thead>
         <th>شماره</th>
         <th>متن سوال</th>
         <th>نمره</th>
         <th>طراح</th>
+        <th>اقدامات</th>
         </thead>
     {% for problem in problems %}
         <tr>

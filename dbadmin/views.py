@@ -6,7 +6,7 @@ from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 
 from Olympiad.helpers import run_query
-from dbadmin.forms import NewFeolForm, NewOlForm, RegisterForm, LoginForm, NewUniversityfieldForm
+from dbadmin.forms import NewFeolForm, NewOlForm, NewUniversityfieldForm
 
 
 class AdminPermission:
@@ -21,7 +21,7 @@ class newFeol(AdminPermission, FormView):
     form_class = NewFeolForm
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('ysc:home')
 
     def form_valid(self, form):
         run_query("insert into field(fname, gold_no, silver_no) values(%s,%s,%s)",
@@ -39,7 +39,7 @@ class NewOl(AdminPermission, FormView):
     template_name = 'dbadmin/newOl.html'
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('ysc:home')
 
     def form_valid(self, form):
         print(self.request.session['user'])
@@ -62,33 +62,6 @@ class ScholarsList(AdminPermission, TemplateView):
                                         'university_field_id=UniversityField.id', fetch=True,
                                         raise_not_found=False)
         return context
-
-
-class RegisterView(AdminPermission, FormView):
-    template_name = 'dbadmin/register.html'
-    form_class = RegisterForm
-
-    def get_success_url(self):
-        return reverse('dbadmin:successful-signup')
-
-    def form_valid(self, form):
-        data = form.cleaned_data
-        run_query('insert into human(national_code, name, password) values (%s, %s, %s)',
-                  [data['national_code'], data['name'], data['password']])
-        return super().form_valid(form)
-
-
-class LoginView(AdminPermission, FormView):
-    template_name = 'dbadmin/login.html'
-    form_class = LoginForm
-
-    def get_success_url(self):
-        return reverse('home')
-
-    def form_valid(self, form):
-        user = form.cleaned_data['user']
-        self.request.session['user'] = user
-        return super().form_valid(form)
 
 
 class NewUniversityField(AdminPermission, FormView):

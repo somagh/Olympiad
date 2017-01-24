@@ -36,7 +36,7 @@ class RequestUniversityField(SuccessMessageMixin, FormView):
     success_message = 'شما با موفقیت در رشته مدنظر ثبت نام شدید'
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('ysc:home')
 
     def dispatch(self, request, *args, **kwargs):
         self.groups = run_query('select gp_name from groups where fname in (select fname from '

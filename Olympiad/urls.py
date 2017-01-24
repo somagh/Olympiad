@@ -18,14 +18,13 @@ from django.conf.urls import url, include
 from olympiad_manager.urls import olympiad_urlpatterns
 from olympiad_manager.views.problem import GradeView
 from scholar.views import RegisterOlympiad
-from ysc.views import HomeView, LogoutView
+from ysc.views import HomeView, LogoutView, RegisterView, LoginView
 
 urlpatterns = [
     url(r'^olympiad/(?P<fname>[^/]*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
     url(r'^', include('dbadmin.urls', namespace='dbadmin')),
     url(r'^', include('scholar.urls', namespace='scholar')),
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^', include('ysc.urls', namespace='ysc')),
     url(r'^grade/(?P<eid>\d+)/(?P<pnum>\d+)/$', GradeView.as_view(), name='grade'),
-    url(r'^$', HomeView.as_view(), name='home'),
 ]
 
