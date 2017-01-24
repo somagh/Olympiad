@@ -121,10 +121,14 @@ class GradeForm(forms.Form):
                 pass
 
 class LevelForm(forms.Form):
-    def __init__(self,**kwargs):
-        year=kwargs.pop('year')
-        fname=kwargs.pop('fname')
+    def __init__(self,year,fname,medalists,**kwargs):
         super().__init__(**kwargs)
-        medalists=run_query("select scholar_id from summercamp_silver where year=%s and fname=%s",[year,fname],fetch=True,raise_not_found=False)\
-                  + run_query("select scholar_id from summercamp_bronze where year=%s and fname=%s",[year,fname],fetch=True,raise_not_found=False)
+        for i,medalist in enumerate(medalists):
+            self.fields[medalist['scholar_id']]=forms.IntegerField(label=medalist['name'],
+                                                                    required=False)
+            try:
+                level = run_query('select level from scholar where id=%s',[medalist['scholar_id']],fetch=True)[0]
+                self.fields[medalist['scholar_id']].initial = level['level']
+            except Http404:
+                pass
 

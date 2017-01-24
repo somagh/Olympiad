@@ -176,7 +176,7 @@ class GradeView(FormView):
                 self.scholars = run_query(
                     'select national_code, name from m2_accepted join human on '
                     'scholar_id=national_code where fname=%s and year=%s',
-                    [exam['fname'], exam['year']], fetch=True)
+                    [exam['fname'], exam['year']], fetch=True, raise_not_found=False)
             else:
                 exam = exam[0]
                 self.scholars = run_query(
