@@ -29,6 +29,10 @@
 		</head>
 
 		<body>
+            {% for message in messages %}
+                <script>alert("{{message}}");</script>
+            {% endfor %}
+
 			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
@@ -114,8 +118,14 @@
                             {% if request.session.user %}
 							<li>
 								<div class="quote">ثبت نام در المپیاد</div>
-								<a href="{% url 'register-olympiad' %}">
+								<a href="{% url 'scholar:register-olympiad' %}">
                                     <div class="author"> ثبت نام یا اطلاع از وضعیت ثبت نامی خود در المپیادهای علمی</div>
+							    </a>
+                            </li>
+                            <li>
+								<div class="quote">درخواست عضویت در رشته‌های دانشگاهی</div>
+								<a href="{% url 'scholar:request-university-field' %}">
+                                    <div class="author"> ثبت نام در رشته‌های دانشگاهی ویژه مدال‌آوران طلا</div>
 							    </a>
                             </li>
                             {% else %}
@@ -196,6 +206,7 @@
 	</div> <!-- /productWrap -->
     {% endif %}
 
+    {% if my_olympiads or isAdmin %}
 	<div id="featureWrap">
 		<div class="container">
             <div class="row">
@@ -223,6 +234,7 @@
 			</div>
 		</div>
 	</div> <!-- /featureWrap -->
+    {% endif %}
 
 	<footer>
 		<div class="container">

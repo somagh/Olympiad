@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static%}
+{% block static %}
+    {{ block.super }}
+    <script src="{% static 'scholar/registed-olympiad.js' %}"></script>
+{% endblock %}
+
+    {% block title %}رشته دانشگاهی {% endblock %}
+{% block content %}
+    <h1>درخواست عضویت در رشته‌های دانشگاهی</h1>
+    <form method="post" id="form">
+        {% csrf_token %}
+        {% if not is_gold %}
+            <h2>شما متاسفانه مدال طلا کسب نکردید</h2>
+        {% else %}
+            {{form.as_p}}
+        {% endif %}
+        <button class="btn btn-success" type="submit">ثبت</button>
+    </form>
+{% endblock %}

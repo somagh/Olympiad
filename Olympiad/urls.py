@@ -23,7 +23,7 @@ from ysc.views import HomeView, LogoutView
 urlpatterns = [
     url(r'^olympiad/(?P<fname>[^/]*)/(?P<year>\d+)/', include(olympiad_urlpatterns, namespace='olympiad')),
     url(r'^', include('dbadmin.urls', namespace='dbadmin')),
-    url(r'^register-olympiad/$',RegisterOlympiad.as_view(),name='register-olympiad'),
+    url(r'^', include('scholar.urls', namespace='scholar')),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^grade/(?P<eid>\d+)/(?P<pnum>\d+)/$', GradeView.as_view(), name='grade'),
     url(r'^$', HomeView.as_view(), name='home'),
