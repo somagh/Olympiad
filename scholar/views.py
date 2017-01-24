@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.urls import reverse
 from django.views.generic import FormView
 
@@ -20,4 +21,8 @@ class RegisterOlympiad(FormView):
     def form_valid(self, form):
         data=form.cleaned_data
         run_query("insert into participation(national_code,fname,year) values(%s,%s,%s)",[self.request.session['user']['national_code'],data['fname'],data['year']])
+        try:
+            exist=run_query("select * from scholar where id=%s",[self.request.session['user']['national_code']],fetch=True)
+        except Http404:
+            run_query("insert into scholar(id) values (%s)",[self.request.session['user']['national_code']])
         return super().form_valid(form)
