@@ -163,7 +163,7 @@
 							<a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=2"><li>نتایج مرحله دوم</li></a>
 						</ul>
 						<li class="call">
-							<a class="btn btn-success btn-lg" href="#">اسامی مدال آوران</a>
+							<a class="btn btn-success btn-lg" href="{% url 'olympiad:medals' olympiad.fname olympiad.year %}">اسامی مدال آوران</a>
 						</li>
 					</ul>
 				</div>
