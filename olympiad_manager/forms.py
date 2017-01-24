@@ -119,3 +119,12 @@ class GradeForm(forms.Form):
                 self.fields[scholar['national_code']].initial = grade['score']
             except Http404:
                 pass
+
+class LevelForm(forms.Form):
+    def __init__(self,**kwargs):
+        year=kwargs.pop('year')
+        fname=kwargs.pop('fname')
+        super().__init__(**kwargs)
+        medalists=run_query("select scholar_id from summercamp_silver where year=%s and fname=%s",[year,fname],fetch=True,raise_not_found=False)\
+                  + run_query("select scholar_id from summercamp_bronze where year=%s and fname=%s",[year,fname],fetch=True,raise_not_found=False)
+
