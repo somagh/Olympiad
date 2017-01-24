@@ -23,6 +23,7 @@
         </div>
          {{ form.m1_date|add_class:'form-control'|add_class:'col-sm-3' }}
          <button type="button" onclick="location.href='{% url 'olympiad:problem:list' fname year form.m1_eid.value %}'" class="btn btn-default col-sm-offset-1">مدیریت سوال ها</button>
+         <button type="button" onclick="location.href='{% url 'olympiad:problem:results' fname year form.m1_eid.value %}'" class="btn btn-default">مشاهده نتایج</button>
      </div>
      <div id="m2days">
          <h3>مرحله دوم</h3>
@@ -38,6 +39,7 @@
              {% else %}
                      {{ i }}
                      <button type="button" class="btn btn-default col-sm-offset-1" onclick="location.href='{% url 'olympiad:problem:list' fname year i.value %}'">مدیریت سوال ها</button>
+                     <button type="button" class="btn btn-default" onclick="location.href='{% url 'olympiad:problem:results' fname year i.value %}'">مشاهده نتایج</button>
                  </div>
                 {% endif %}
          {% endif %}

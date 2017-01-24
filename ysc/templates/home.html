@@ -152,8 +152,9 @@
 						<li class="title">المپیاد {{olympiad.fname}} {{olympiad.year}}</li>
 						<li class="price">مدیریت: {{olympiad.name}}</li>
 						<ul class="features">
-							<li>نتایج مرحله اول</li>
-							<li>نتایج مرحله دوم</li>
+                            <a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=0"><li>شرکت کنندگان</li></a>
+							<a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=1"><li>نتایج مرحله اول</li></a>
+							<a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=2"><li>نتایج مرحله دوم</li></a>
 						</ul>
 						<li class="call">
 							<a class="btn btn-success btn-lg" href="#">اسامی مدال آوران</a>

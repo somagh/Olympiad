@@ -55,12 +55,14 @@ class ScholarsList(AdminPermission, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['scholars'] = run_query('select scholar.id, Human.name, UniversityField.name '
-                                        'as uname from scholar '
-                                        'join Human on id=national_code left join '
-                                        'UniversityField on '
-                                        'university_field_id=UniversityField.id', fetch=True,
-                                        raise_not_found=False)
+        context['scholars'] = run_query(
+            'select national_code as id, Human.name, UniversityField.name '
+            'as uname from bmn '
+            'natural join Human join scholar on '
+            'national_code=scholar.id left join '
+            'UniversityField on '
+            'university_field_id=UniversityField.id', fetch=True,
+            raise_not_found=False)
         return context
 
 

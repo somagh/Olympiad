@@ -22,8 +22,8 @@ class OlympiadView(SuccessMessageMixin, OlympiadMixin, FormView):
                   [self.fname, self.year], fetch=True, raise_not_found=False)
         for scholar in scholars:
             try:
-                run_query('select id from scholar where id=%s', [scholar['scholar_id']],
+                run_query('select national_code from bmn where national_code=%s', [scholar['scholar_id']],
                           fetch=True)
             except Http404:
-                run_query('insert into scholar(id) values(%s)', [scholar['scholar_id']])
+                run_query('insert into bmn(national_code) values(%s)', [scholar['scholar_id']])
         return super().form_valid(form)

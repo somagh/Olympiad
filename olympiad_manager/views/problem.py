@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.templatetags.static import register
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView
 from rest_framework.response import Response
@@ -6,6 +7,11 @@ from rest_framework.views import APIView
 
 from Olympiad.helpers import OlympiadMixin, run_query
 from olympiad_manager.forms import ProblemForm, GradeForm, AddGraderForm
+
+
+@register.filter
+def lookup(d, key):
+    return d[key]
 
 
 class ProblemListView(OlympiadMixin, TemplateView):
@@ -75,8 +81,9 @@ class EditProblemView(OlympiadMixin, FormView):
                    self.kwargs['pnum']])
         return super().form_valid(form)
 
-class ManageGraderView(OlympiadMixin,FormView):
-    template_name='olympiad/manage-graders.html'
+
+class ManageGraderView(OlympiadMixin, FormView):
+    template_name = 'olympiad/manage-graders.html'
     form_class = AddGraderForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -85,27 +92,66 @@ class ManageGraderView(OlympiadMixin,FormView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('olympiad:problem:graders', args=[self.fname, self.year,self.eid,self.pnum])
+        return reverse('olympiad:problem:graders',
+                       args=[self.fname, self.year, self.eid, self.pnum])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['graders'] = run_query("select * from grading join human on grader_id=national_code where eid=%s and pnum=%s",[self.eid,self.pnum],fetch=True,raise_not_found=False)
-        context['eid']=self.eid
-        context['pnum']=self.pnum
+        context['graders'] = run_query(
+            "select * from grading join human on grader_id=national_code where eid=%s and pnum=%s",
+            [self.eid, self.pnum], fetch=True, raise_not_found=False)
+        context['eid'] = self.eid
+        context['pnum'] = self.pnum
         return context
 
-    def form_valid(self,form):
-        data=form.data
+    def form_valid(self, form):
+        data = form.data
         for i in range(int(data['new_grader_count'])):
             if form.data['new_code_' + str(i)] == "":
                 continue
-            run_query('insert into grading(grader_id,eid,pnum) values(%s,%s,%s)',[form.data['new_code_' + str(i)],self.eid,self.pnum])
+            run_query('insert into grading(grader_id,eid,pnum) values(%s,%s,%s)',
+                      [form.data['new_code_' + str(i)], self.eid, self.pnum])
         return super().form_valid(form)
 
 
+class ExamResultsView(TemplateView):
+    template_name = 'olympiad/exam_results.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pnums = run_query('select pnum from problem where eid=%s order by pnum',
+                          [self.kwargs['eid']], fetch=True,
+                          raise_not_found=False)
+        problems = {pnum['pnum']: i for i, pnum in enumerate(pnums)}
+        problem_grades = run_query(
+            'select name, scholar_id, pnum, round(score, 2) as score from problem_grade join human '
+            'on scholar_id=national_code where eid=%s',
+            [self.kwargs['eid']],
+            fetch=True,
+            raise_not_found=False)
+        grades = {}
+        for item in problem_grades:
+            id = item['scholar_id']
+            name = item['name']
+            if not (id in grades):
+                grades[id] = (name, [None for i in range(len(problems))])
+            index = problems[item['pnum']]
+            grades[id][1][index] = str(item['score'])
+
+        context['grades'] = grades
+        context['problems'] = [i + 1 for i in range(len(problems))]
+        context['total_scores'] = run_query(
+            'select scholar_id as id, round(score, 3) as score from '
+            'exam_grade where eid=%s order by score desc', [self.kwargs['eid']],
+            fetch=True, raise_not_found=False)
+        return context
+
+
 class DeleteGraderView(APIView):
-    def post(self,request,*args,**kwargs):
-        run_query('delete from grading where eid=%s and pnum=%s and grader_id=%s',[request.POST.get('eid'),request.POST.get('pnum'),request.POST.get('national_code')])
+    def post(self, request, *args, **kwargs):
+        run_query('delete from grading where eid=%s and pnum=%s and grader_id=%s',
+                  [request.POST.get('eid'), request.POST.get('pnum'),
+                   request.POST.get('national_code')])
         return Response()
 
 

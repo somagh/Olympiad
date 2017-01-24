@@ -28,6 +28,7 @@
                     </td>
                     <td>
                         <a href="{% url 'olympiad:problem:list' fname year exam.eid %}"><button class="btn btn-default">مدیریت سوالات</button></a>
+                        <a href="{% url 'olympiad:problem:results' fname year exam.eid %}"><button class="btn btn-default">مشاهده نتایج</button></a>
                     </td>
                 </tr>
             {% endfor %}

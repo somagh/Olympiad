@@ -2,17 +2,20 @@
 
     {% block title %} المپیاد {{fname}} {{year}}{% endblock %}
 {% block content %}
+       <div class="list-group">
        <h1>المپیاد {{fname}} سال {{year}}</h1>
-       <a href="{% url 'olympiad:m1m2date' fname year %}"> مرحله اول و دوم</a>
+       <a class="list-group-item" href="{% url 'olympiad:m1m2date' fname year %}"> مرحله اول و دوم</a>
        <br>
-       <a href="{% url 'olympiad:course:list' fname year %}"> کلاس‌های دوره تابستانی</a>
+       <a class="list-group-item" href="{% url 'olympiad:course:list' fname year %}"> کلاس‌های دوره تابستانی</a>
        <br>
-       <a href="{% url 'olympiad:summer-camp-exam:list' fname year %}"> آزمون‌های دوره تابستانی</a>
+       <a class="list-group-item" href="{% url 'olympiad:summer-camp-exam:list' fname year %}"> آزمون‌های دوره تابستانی</a>
        <br>
-       <a href="{% url 'olympiad:levels' fname year %}"> تراز مدال آوران</a>
+       <a class="list-group-item" href="{% url 'olympiad:levels' fname year %}"> تراز مدال آوران</a>
+       <br>
        <form method="post">
               {% csrf_token %}
               <button class="btn btn-success" type="submit">ثبت‌نام مدال‌آوران در بنیاد ملی نخبگان</button>
        </form>
+       </div>
 {% endblock %}
 
