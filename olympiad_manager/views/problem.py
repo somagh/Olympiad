@@ -102,17 +102,19 @@ class ManageGraderView(OlympiadMixin,FormView):
             run_query('insert into grading(grader_id,eid,pnum) values(%s,%s,%s)',[form.data['new_code_' + str(i)],self.eid,self.pnum])
         return super().form_valid(form)
 
+
 class DeleteGraderView(APIView):
     def post(self,request,*args,**kwargs):
         run_query('delete from grading where eid=%s and pnum=%s and grader_id=%s',[request.POST.get('eid'),request.POST.get('pnum'),request.POST.get('national_code')])
         return Response()
 
 
-
-
 class GradeView(FormView):
     template_name = 'olympiad/grade.html'
     form_class = GradeForm
+
+    def get_success_url(self):
+        return reverse('home')
 
     def dispatch(self, request, *args, **kwargs):
         self.eid = self.kwargs['eid']
@@ -156,7 +158,7 @@ class GradeView(FormView):
                           'grader_id) do update set score=%s',
                           [score, id, self.eid, self.kwargs['pnum'], self.user['national_code'],
                            score])
-        return HttpResponse('ok')
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
