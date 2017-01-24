@@ -1,5 +1,6 @@
 from django.conf.urls import url, include
 
+from olympiad_manager.views.levels import ManageLevelsView
 from olympiad_manager.views.course import AddCourseView, EditCourseView
 from olympiad_manager.views.course import CourseListView
 from olympiad_manager.views.home import OlympiadView
@@ -36,4 +37,5 @@ olympiad_urlpatterns = [
     url(r'^summer-exam/', include(summer_exam_urlpatterns, namespace='summer-camp-exam')),
     url(r'^m1m2date/$', M1M2Date.as_view(), name='m1m2date'),
     url(r'^problem/(?P<eid>\d+)/', include(problem_urlpatterns, namespace='problem')),
+    url(r'^levels/$',ManageLevelsView.as_view(),name="levels")
 ]
