@@ -111,12 +111,16 @@
 				<div class="col-xs-12">
 					<div class="flexslider">
 						<ul class="slides">
+                            {% if request.session.user %}
 							<li>
 								<div class="quote">ثبت نام در المپیاد</div>
 								<a href="{% url 'register-olympiad' %}">
                                     <div class="author"> ثبت نام یا اطلاع از وضعیت ثبت نامی خود در المپیادهای علمی</div>
 							    </a>
                             </li>
+                            {% else %}
+                               <p>لطفا ابتدا <a  href="{% url 'dbadmin:login' %}">وارد</a> شوید</p>
+                            {% endif %}
 						</ul>
 					</div>
 				</div>
@@ -194,6 +198,11 @@
 
 	<div id="featureWrap">
 		<div class="container">
+            <div class="row">
+				<div class="col-xs-12">
+					<h2 class="sectionTitle">مدیریت</h2>
+				</div>
+			</div>
 			<div class="row">
                 {% for olympiad in my_olympiads %}
                 <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'olympiad:home' olympiad.fname olympiad.year %}'">
