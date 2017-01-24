@@ -114,7 +114,7 @@ class GradeView(FormView):
     form_class = GradeForm
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('ysc:home')
 
     def dispatch(self, request, *args, **kwargs):
         self.eid = self.kwargs['eid']

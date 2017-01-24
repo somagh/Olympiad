@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+    {% block title %}اعضای بنیاد ملی نخبگان {% endblock %}
+{% block content %}
+    <h1>لیست اعضای بنیاد ملی نخبگان</h1>
+    <table class="table table-hover table-striped">
+        <thead>
+        <th>شماره ملی</th>
+        <th>نام و نام خانوادگی</th>
+        <th>رشته دانشگاهی</th>
+        </thead>
+        <tbody>
+        {% for scholar in scholars %}
+            <tr>
+                <td>{{scholar.id}}</td>
+                <td>{{scholar.name}}</td>
+                <td>{% if scholar.uname %} {{scholar.uname}} {% else %} ----- {% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
