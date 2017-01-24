@@ -123,9 +123,15 @@
 							    </a>
                             </li>
                             <li>
-								<div class="quote">درخواست عضویت در رشته‌های دانشگاهی</div>
+								<div class="quote">ثبت نام در رشته‌های دانشگاهی</div>
 								<a href="{% url 'scholar:request-university-field' %}">
                                     <div class="author"> ثبت نام در رشته‌های دانشگاهی ویژه مدال‌آوران طلا</div>
+							    </a>
+                            </li>
+                            <li>
+								<div class="quote">درخواست عضویت در رشته های دانشگاهی</div>
+								<a href="{% url 'scholar:request-university-field-silver' %}">
+                                    <div class="author"> درخواست عضویت ویژه مدال‌آوران نقره و برنز</div>
 							    </a>
                             </li>
                             {% else %}
@@ -190,9 +196,12 @@
 						</div>
 						<div class="col-xs-10">
 							<h3>سوالاتی که شما مصحح آن‌ها هستید</h3>
+                            <ul>
                             {% for problem in grader_problems %}
-							<a href="{% url 'grade' problem.eid problem.pnum %}"><p>{{ problem.text }}</p></a>
-						    {% endfor %}
+                                <div style="direction: rtl;">
+							<a href="{% url 'grade' problem.eid problem.pnum %}"><li>{{ problem.text }}</li></a>
+						    {% endfor %}</div>
+                            </ul>
                         </div>
 						<div class="col-xs-2 icon">
 							<span class="fa-stack fa-lg">
@@ -238,6 +247,10 @@
                 <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:scholars-list' %}'">
 					<i class="fa fa-tablet icon" style="font-size: 20px"> بنیاد ملی نخبگان</i>
                     <h3>مشاهده اعضای بنیاد ملی نخبگان</h3>
+				</div>
+                <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:field-requests' %}'">
+					<i class="fa fa-tablet icon" style="font-size: 20px">سهمیه نقره و برنز</i>
+                    <h3>اعمال سهمیه مدال در رشته های دانشگاهی</h3>
 				</div>
                 {% endif %}
 			</div>

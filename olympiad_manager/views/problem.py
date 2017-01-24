@@ -144,6 +144,15 @@ class ExamResultsView(TemplateView):
             'select scholar_id as id, round(score, 3) as score from '
             'exam_grade where eid=%s order by score desc', [self.kwargs['eid']],
             fetch=True, raise_not_found=False)
+
+        is_summer_exam = run_query('select count(*) from summercampexam where eid=%s',
+                                   [kwargs['eid']], fetch=True)[0]
+        if is_summer_exam['count'] > 0:
+            context['back_url'] = reverse('olympiad:summer-camp-exam:list', args=[kwargs['fname'],
+                                                                                 kwargs['year']])
+        else:
+            context['back_url'] = reverse('olympiad:m1m2date', args=[kwargs['fname'], kwargs['year']])
+
         return context
 
 

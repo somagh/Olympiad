@@ -27,6 +27,7 @@ class NewOlForm(forms.Form):
 
 
 class NewUniversityfieldForm(forms.Form):
+    name = forms.CharField(label='نام رشته')
     id = forms.IntegerField(label='کد رشته محل')
     min_level = forms.IntegerField(label='حداقل تراز قبولی')
     olympiad_capacity = forms.IntegerField(label='حداکثر المپیادی')

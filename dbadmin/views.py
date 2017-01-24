@@ -1,3 +1,4 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import reverse
@@ -66,13 +67,44 @@ class ScholarsList(AdminPermission, TemplateView):
         return context
 
 
-class NewUniversityField(AdminPermission, FormView):
+class NewUniversityField(SuccessMessageMixin, AdminPermission, FormView):
     template_name = 'dbadmin/newUniversityfield.html'
     form_class = NewUniversityfieldForm
+    success_message = 'رشته دانشگاهی جدید با موفقیت اضافه شد'
+
+    def get_success_url(self):
+        return reverse('ysc:home')
 
     def form_valid(self, form):
         run_query(
-            "insert into universityfield(id, gp_name, min_level, olympiad_capacity) values(%s,%s,%s,%s)",
+            "insert into universityfield(id, gp_name, min_level, olympiad_capacity, name) values(%s,%s,%s,%s, %s)",
             [form.data['id'], form.data['group_name'],
-             form.data['min_level'], form.data['olympiad_capacity']])
-        return HttpResponse("رشته دانشگاهی جدید با موفقیت اضافه شد")
+             form.data['min_level'], form.data['olympiad_capacity'], form.data['name']])
+        return super().form_valid(form)
+
+
+class FieldRequests(AdminPermission, FormView):
+    template_name = 'dbadmin/field-requests.html'
+    form_class = NewUniversityfieldForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        q = run_query(
+            'select national_code, human.name, field_id, level, min_level, olympiad_capacity, '
+            'universityfield.name as uname from human join scholar on national_code=scholar.id '
+            'natural join '
+            'universityfieldpriority join universityfield on field_id=universityfield.id '
+            'order by level desc', fetch=True,
+            raise_not_found=False)
+        count = {}
+        out = []
+        for h in q:
+            current = count.get(h['field_id'], 0)
+            if h['olympiad_capacity'] - current >= 0:
+                if h['level'] and int(h['level']) * 1.2 >= h['min_level']:
+                    run_query('update scholar set university_field_id=%s where id=%s',
+                              [h['field_id'], h['national_code']])
+                    count[h['field_id']] = current + 1
+                    out.append({'name': h['name'], 'uname': h['uname']})
+        context['scholars'] = out
+        return context

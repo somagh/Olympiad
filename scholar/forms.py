@@ -12,13 +12,16 @@ class RegisterOlympiadForm(forms.Form):
 class RequestUniversityFieldForm(forms.Form):
     field = forms.ChoiceField(label='رشته مورد علاقه')
 
-    def __init__(self, groups, **kwargs):
+    def __init__(self, groups, initial=None, **kwargs):
         super().__init__(**kwargs)
         fields = []
         for group in groups:
-            fields += run_query('select * from UniversityField where gp_name=%s', [group['gp_name']], fetch=True,
-                           raise_not_found=False)
+            fields += run_query('select * from UniversityField where gp_name=%s',
+                                [group['gp_name']], fetch=True,
+                                raise_not_found=False)
         self.fields['field'].choices = [(field['id'], field['name']) for field in fields]
+        if initial:
+            self.fields['field'].initial = initial
 
     def clean(self):
         super().clean()
