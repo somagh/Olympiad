@@ -1,13 +1,22 @@
-from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import reverse
 
 from django.views.generic import FormView
+from django.views.generic.base import TemplateView
 
 from Olympiad.helpers import run_query
-from dbadmin.forms import NewFeolForm, NewOlForm, RegisterForm, LoginForm , NewUniversityfieldForm
+from dbadmin.forms import NewFeolForm, NewOlForm, RegisterForm, LoginForm, NewUniversityfieldForm
 
 
-class newFeol(FormView):
+class AdminPermission:
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.session['user']['national_code'] != 'root':
+            return HttpResponseForbidden('دسترسی به این صفحه ممنوع است')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class newFeol(AdminPermission, FormView):
     template_name = 'dbadmin/newFeol.html'
     form_class = NewFeolForm
 
@@ -25,7 +34,7 @@ class newFeol(FormView):
         return super().form_valid(form)
 
 
-class NewOl(FormView):
+class NewOl(AdminPermission, FormView):
     form_class = NewOlForm
     template_name = 'dbadmin/newOl.html'
 
@@ -41,7 +50,21 @@ class NewOl(FormView):
         return super().form_valid(form)
 
 
-class RegisterView(FormView):
+class ScholarsList(AdminPermission, TemplateView):
+    template_name = 'dbadmin/scholars.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['scholars'] = run_query('select scholar.id, Human.name, UniversityField.name '
+                                        'as uname from scholar '
+                                        'join Human on id=national_code left join '
+                                        'UniversityField on '
+                                        'university_field_id=UniversityField.id', fetch=True,
+                                        raise_not_found=False)
+        return context
+
+
+class RegisterView(AdminPermission, FormView):
     template_name = 'dbadmin/register.html'
     form_class = RegisterForm
 
@@ -55,7 +78,7 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
 
-class LoginView(FormView):
+class LoginView(AdminPermission, FormView):
     template_name = 'dbadmin/login.html'
     form_class = LoginForm
 
@@ -68,13 +91,13 @@ class LoginView(FormView):
         return super().form_valid(form)
 
 
-class NewUniversityField(FormView):
+class NewUniversityField(AdminPermission, FormView):
     template_name = 'dbadmin/newUniversityfield.html'
     form_class = NewUniversityfieldForm
 
     def form_valid(self, form):
-        run_query("insert into universityfield(id, gp_name, min_level, olympiad_capacity) values(%s,%s,%s,%s)",
-                  [form.data['id'], form.data['group_name'],
-                   form.data['min_level'], form.data['olympiad_capacity']])
+        run_query(
+            "insert into universityfield(id, gp_name, min_level, olympiad_capacity) values(%s,%s,%s,%s)",
+            [form.data['id'], form.data['group_name'],
+             form.data['min_level'], form.data['olympiad_capacity']])
         return HttpResponse("رشته دانشگاهی جدید با موفقیت اضافه شد")
-

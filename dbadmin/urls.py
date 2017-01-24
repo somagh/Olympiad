@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
 
-from dbadmin.views import newFeol, NewOl, RegisterView, LoginView , NewUniversityField
+from dbadmin.views import newFeol, NewOl, RegisterView, LoginView , NewUniversityField, ScholarsList
 
 urlpatterns = [
     url(r'^signup/$', RegisterView.as_view(), name='register'),
@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^new-field/$', newFeol.as_view(), name='new-field'),
     url(r'^new-olympiad/$', NewOl.as_view(), name='new-olympiad'),
+    url(r'^scholars-list/$', ScholarsList.as_view(), name='scholars-list'),
     url(r'^new-universityfield/$', NewUniversityField.as_view(), name='new-university-field'),
 ]

@@ -18,6 +18,10 @@
 </head>
 
 <body>
+            {% for message in messages %}
+                <script>alert("{{message}}");</script>
+            {% endfor %}
+
 <div class="container">
     <button class="btn btn-info" onclick="location.href='{% url 'home' %}'">خانه</button>
     {% block content %}
