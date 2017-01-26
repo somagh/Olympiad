@@ -1,0 +1,12 @@
+{% extends  "olympiad/teaching-hours.html" %}
+{% load static%}
+
+{% block form   %}
+ <form method="post">
+     <h2>اضافه کردن ساعت کاری</h2>
+    {% csrf_token %}
+     {{ form.as_p }}
+     <button class="btn btn-success" type="submit">ثبت</button>
+     <a class="btn btn-primary" href="{% url 'olympiad:course:list' fname year%}"> بازگشت </a>
+ </form>
+{% endblock %}

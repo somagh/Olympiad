@@ -22,6 +22,7 @@ class HomeView(TemplateView):
         context['grader_problems'] = run_query('select eid, pnum, text from grading natural join '
                                                'problem where grader_id=%s', [self.username],
                                                fetch=True, raise_not_found=False)
+        context['teacher_courses']=run_query("select cname,year,fname from course where teacher_id=%s",[self.username],fetch=True,raise_not_found=False)
         return context
 
 

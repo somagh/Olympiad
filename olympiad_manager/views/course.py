@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from Olympiad.helpers import OlympiadMixin, run_query
-from olympiad_manager.forms import CourseForm
+from olympiad_manager.forms import CourseForm, TeachingHourForm
 
 
 class CourseListView(OlympiadMixin, TemplateView):
@@ -63,4 +63,29 @@ class EditCourseView(OlympiadMixin, FormView):
                   'where fname=%s and year=%s and cname=%s',
                   [data['name'], data['minpass'], data['teacher'], data['wage'], self.fname,
                    self.year, self.course['cname']])
+        return super().form_valid(form)
+
+
+class TeachingHourListView(TemplateView):
+    template_name = 'olympiad/teaching-hours.html'
+
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['hours']=run_query("select st,en,day,en-st as time,(en-st)*hourly_wage as wage from teachinghour natural join course where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True,raise_not_found=False)
+        context['hourly_wage']=run_query("select hourly_wage from course where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['hourly_wage']
+        context['total_time']=run_query("select sum(en-st) as sum from teachinghour where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['sum']
+        context['total_wage']=run_query("select sum((en-st)*hourly_wage) as total from course natural join teachinghour where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['total']
+        return context
+
+class AddTeachingHourView(OlympiadMixin,TeachingHourListView,FormView):
+    template_name = 'olympiad/add_teaching_hour.html'
+    form_class = TeachingHourForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.cname=kwargs['cname']
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        data=form.cleaned_data
+        run_query("insert into teachinghour(fname,year,cname,st,en,day) values(%s,%s,%s,%s,%s,%s)",[self.fname,self.year,self.cname,data['st'],data['en'],data['day']])
         return super().form_valid(form)

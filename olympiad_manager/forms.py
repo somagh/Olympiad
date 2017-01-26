@@ -132,3 +132,8 @@ class LevelForm(forms.Form):
             except Http404:
                 pass
 
+class TeachingHourForm(forms.Form):
+    st=forms.FloatField(label='آغاز کار')
+    en=forms.FloatField(label='پایان کار')
+    day=forms.CharField(label='روز')
+

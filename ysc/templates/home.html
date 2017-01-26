@@ -1,368 +1,382 @@
 {% load static %}
 
 <!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="utf-8">
-			<meta http-equiv="X-UA-Compatible" content="IE=edge">
-			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-			<meta name="description" content="A Bootstrap based app landing page template">
-			<meta name="author" content="">
-			<link rel="shortcut icon" href="{% static 'assets/ico/favicon.ico' %}">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="A Bootstrap based app landing page template">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{% static 'assets/ico/favicon.ico' %}">
 
-			<title>باشگاه دانش‌پژوهان جوان</title>
+    <title>باشگاه دانش‌پژوهان جوان</title>
 
-			<!-- Bootstrap core CSS -->
-			<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-			<!-- Custom styles for this templates -->
-			<link href="{% static 'css/custom.css' %}" rel="stylesheet">
-			<link href="{% static 'css/flexslider.css' %}" rel="stylesheet">
+    <!-- Custom styles for this templates -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/flexslider.css' %}" rel="stylesheet">
 
-            <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-			<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-			<!--[if lt IE 9]>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 			<![endif]-->
-		</head>
+</head>
 
-		<body>
-            {% for message in messages %}
-                <script>alert("{{message}}");</script>
-            {% endfor %}
+<body>
+{% for message in messages %}
+    <script>alert("{{message}}");</script>
+{% endfor %}
 
-			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a class="navbar-brand" href="#topWrap">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#topWrap">
 							<span class="fa-stack fa-lg">
 								<i class="fa fa-circle fa-stack-2x"></i>
 								<i class="fa fa-mobile fa-stack-1x fa-inverse"></i>
 							</span>
-                            <span class="title">باشگاه</span>دانش‌پژوهان جوان
-						</a>
-					</div>
-					<div class="collapse navbar-collapse appiNav">
-						<ul class="nav navbar-nav">
-                            {% if my_olympiads or isAdmin %}
-							<li><a href="#featureWrap">مدیریت</a></li>
-                            {% endif %}
-                            {% if grader_problems %}
-							    <li><a href="#productWrap">سوالات و کلاس‌ها</a></li>
-                            {% endif %}
-							<li><a href="#pricingWrap">مشاهده نتایج</a></li>
-							<li><a href="#testimonialsWrap">امور دانش‌پژوهان</a></li>
-                            {% if request.session.user %}
-                                <li><a href="{% url 'ysc:logout' %}">خروج</a></li>
-                                <li><a style="color: #418bca">{{request.session.user.name}}</a></li>
-                            {% endif %}
-						</ul>
-					</div><!--/.nav-collapse -->
-				</div>
-			</div>
-	
-			<div id="topWrap" class="jumbotron" style="background-color: #418bca;">
-			<div class="container">
-				<div class="col-md-6 col-md-push-6 jumboText">
-					<h2>وزارت آموزش و پرورش</h2>
-                    <h2>مرکز ملی پرورش استعدادهای درخشان و دانش‌پژوهان جوان</h2>
-					<h1>باشگاه دانش‌پژوهان جوان </h1>
-                    {% if not request.session.user %}
-                        <a class="btn btn-lg btn-success actionBtn" href="{% url 'ysc:register' %}"><span class="line2">ثبت نام</span><br><i class="fa fa-mobile fa-4x pull-left"></i><span class="line1">در سامانه باشگاه</span></a>
-                        <a class="btn btn-lg btn-default actionBtn" href="{% url 'ysc:login' %}"><span class="line2">ورود</span><br><i class="fa fa-mobile fa-4x pull-left"></i><span class="line1">درصورت داشتن حساب کاربری</span></a>
-                    {% endif %}
+                <span class="title">باشگاه</span>دانش‌پژوهان جوان
+            </a>
+        </div>
+        <div class="collapse navbar-collapse appiNav">
+            <ul class="nav navbar-nav">
+                {% if my_olympiads or isAdmin %}
+                    <li><a href="#featureWrap">مدیریت</a></li>
+                {% endif %}
+                {% if grader_problems %}
+                    <li><a href="#productWrap">سوالات و کلاس‌ها</a></li>
+                {% endif %}
+                <li><a href="#pricingWrap">مشاهده نتایج</a></li>
+                <li><a href="#testimonialsWrap">امور دانش‌پژوهان</a></li>
+                {% if request.session.user %}
+                    <li><a href="{% url 'ysc:logout' %}">خروج</a></li>
+                    <li><a style="color: #418bca">{{ request.session.user.name }}</a></li>
+                {% endif %}
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+
+<div id="topWrap" class="jumbotron" style="background-color: #418bca;">
+    <div class="container">
+        <div class="col-md-6 col-md-push-6 jumboText">
+            <h2>وزارت آموزش و پرورش</h2>
+            <h2>مرکز ملی پرورش استعدادهای درخشان و دانش‌پژوهان جوان</h2>
+            <h1>باشگاه دانش‌پژوهان جوان </h1>
+            {% if not request.session.user %}
+                <a class="btn btn-lg btn-success actionBtn" href="{% url 'ysc:register' %}"><span
+                        class="line2">ثبت نام</span><br><i class="fa fa-mobile fa-4x pull-left"></i><span class="line1">در سامانه باشگاه</span></a>
+                <a class="btn btn-lg btn-default actionBtn" href="{% url 'ysc:login' %}"><span class="line2">ورود</span><br><i
+                        class="fa fa-mobile fa-4x pull-left"></i><span class="line1">درصورت داشتن حساب کاربری</span></a>
+            {% endif %}
+        </div>
+        <div class="col-md-6 col-md-pull-6 hidden-xs">
+            <div class="mobile">
+                <div class="mobileSlider">
+                    <ul class="slides">
+                        <li>
+                            <img src="{% static 'assets/img/1.jpg' %}"/>
+                        </li>
+                        <li>
+                            <img src="{% static 'assets/img/2.png' %}"/>
+                        </li>
+                        <li>
+                            <img src="{% static 'assets/img/3.jpg' %}"/>
+                        </li>
+                        <li>
+                            <img src="{% static 'assets/img/4.jpg' %}"/>
+                        </li>
+                    </ul>
                 </div>
-				<div class="col-md-6 col-md-pull-6 hidden-xs">
-					<div class="mobile">
-						<div class="mobileSlider">
-							<ul class="slides">
-								<li>
-									<img src="{% static 'assets/img/1.jpg' %}"/>
-								</li>
-								<li>
-									<img src="{% static 'assets/img/2.png' %}"/>
-								</li>
-								<li>
-									<img src="{% static 'assets/img/3.jpg' %}"/>
-								</li>
-								<li>
-									<img src="{% static 'assets/img/4.jpg' %}"/>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				
-			</div>
-			</div>
-
-    <div id="testimonialsWrap" class="altWrap">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12">
-					<h2 class="sectionTitle">امور دانش‌پژوهان جوان</h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="flexslider">
-						<ul class="slides">
-                            {% if request.session.user %}
-							<li>
-								<div class="quote">ثبت نام در المپیاد</div>
-								<a href="{% url 'scholar:register-olympiad' %}">
-                                    <div class="author"> ثبت نام یا اطلاع از وضعیت ثبت نامی خود در المپیادهای علمی</div>
-							    </a>
-                            </li>
-                            <li>
-								<div class="quote">ثبت نام در رشته‌های دانشگاهی</div>
-								<a href="{% url 'scholar:request-university-field' %}">
-                                    <div class="author"> ثبت نام در رشته‌های دانشگاهی ویژه مدال‌آوران طلا</div>
-							    </a>
-                            </li>
-                            <li>
-								<div class="quote">درخواست عضویت در رشته های دانشگاهی</div>
-								<a href="{% url 'scholar:request-university-field-silver' %}">
-                                    <div class="author"> درخواست عضویت ویژه مدال‌آوران نقره و برنز</div>
-							    </a>
-                            </li>
-                            {% else %}
-                               <p>لطفا ابتدا <a  href="{% url 'ysc:login' %}">وارد</a> شوید</p>
-                            {% endif %}
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> <!-- /testimonialsWrap -->
-
-	<div id="pricingWrap">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12">
-					<h2 class="sectionTitle">مشاهده نتایج المپیاد‌های علمی</h2>
-				</div>
-			</div>
-			<div class="row">
-            {% for olympiad in olympiads %}
-				<div class="col-sm-4">
-					<ul class="priceTable">
-						<li class="title">المپیاد {{olympiad.fname}} {{olympiad.year}}</li>
-						<li class="price">مدیریت: {{olympiad.name}}</li>
-						<ul class="features">
-                            <a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=0"><li>شرکت کنندگان</li></a>
-							<a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=1"><li>نتایج مرحله اول</li></a>
-							<a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=2"><li>نتایج مرحله دوم</li></a>
-						</ul>
-						<li class="call">
-							<a class="btn btn-success btn-lg" href="#">اسامی مدال آوران</a>
-						</li>
-					</ul>
-				</div>
-            {% endfor %}
             </div>
-		</div>
-	</div> <!-- /pricingWrap -->
+        </div>
 
-    {% if grader_problems %}
-	<div id="productWrap" class="altWrap">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12">
-					<h2 class="sectionTitle">مدیریت سوالات و کلاس‌های المپیادی</h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-5 col-md-offset-1">
-					<div class="imgWrap">
-						<img class="img-responsive" src="{% static 'assets/img/aa.jpg' %}"/>
-					</div>
-				</div>
-				<div class="col-md-5">
-					<div class="productFeatures clearfix">
-						<div class="col-xs-2 icon">
-							<span class="fa-stack fa-lg">
-							<i class="fa fa-circle fa-stack-2x"></i>
-							<i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
-							</span>
-						</div>
-						<div class="col-xs-10">
-							<h3>سوالاتی که شما مصحح آن‌ها هستید</h3>
-                            <ul>
-                            {% for problem in grader_problems %}
-                                <div style="direction: rtl;">
-							<a href="{% url 'grade' problem.eid problem.pnum %}"><li>{{ problem.text }}</li></a>
-						    {% endfor %}</div>
-                            </ul>
-                        </div>
-						<div class="col-xs-2 icon">
-							<span class="fa-stack fa-lg">
-							<i class="fa fa-circle fa-stack-2x"></i>
-							<i class="fa fa-cog fa-stack-1x fa-inverse"></i>
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> <!-- /productWrap -->
-    {% endif %}
+    </div>
+</div>
 
-    {% if my_olympiads or isAdmin %}
-	<div id="featureWrap">
-		<div class="container">
+<div id="testimonialsWrap" class="altWrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="sectionTitle">امور دانش‌پژوهان جوان</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="flexslider">
+                    <ul class="slides">
+                        {% if request.session.user %}
+                            <li>
+                                <div class="quote">ثبت نام در المپیاد</div>
+                                <a href="{% url 'scholar:register-olympiad' %}">
+                                    <div class="author"> ثبت نام یا اطلاع از وضعیت ثبت نامی خود در المپیادهای علمی</div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="quote">ثبت نام در رشته‌های دانشگاهی</div>
+                                <a href="{% url 'scholar:request-university-field' %}">
+                                    <div class="author"> ثبت نام در رشته‌های دانشگاهی ویژه مدال‌آوران طلا</div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="quote">درخواست عضویت در رشته های دانشگاهی</div>
+                                <a href="{% url 'scholar:request-university-field-silver' %}">
+                                    <div class="author"> درخواست عضویت ویژه مدال‌آوران نقره و برنز</div>
+                                </a>
+                            </li>
+                        {% else %}
+                            <p>لطفا ابتدا <a href="{% url 'ysc:login' %}">وارد</a> شوید</p>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /testimonialsWrap -->
+
+<div id="pricingWrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="sectionTitle">مشاهده نتایج المپیاد‌های علمی</h2>
+            </div>
+        </div>
+        <div class="row">
+            {% for olympiad in olympiads %}
+                <div class="col-sm-4">
+                    <ul class="priceTable">
+                        <li class="title">المپیاد {{ olympiad.fname }} {{ olympiad.year }}</li>
+                        <li class="price">مدیریت: {{ olympiad.name }}</li>
+                        <ul class="features">
+                            <a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=0">
+                                <li>شرکت کنندگان</li>
+                            </a>
+                            <a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=1">
+                                <li>نتایج مرحله اول</li>
+                            </a>
+                            <a href="{% url 'olympiad:results' olympiad.fname olympiad.year %}?step=2">
+                                <li>نتایج مرحله دوم</li>
+                            </a>
+                        </ul>
+                        <li class="call">
+                            <a class="btn btn-success btn-lg" href="#">اسامی مدال آوران</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div> <!-- /pricingWrap -->
+
+{% if grader_problems or teacher_courses %}
+    <div id="productWrap" class="altWrap">
+        <div class="container">
             <div class="row">
-				<div class="col-xs-12">
-					<h2 class="sectionTitle">مدیریت</h2>
-				</div>
-			</div>
-			<div class="row">
+                <div class="col-xs-12">
+                    <h2 class="sectionTitle">مدیریت سوالات و کلاس‌های المپیادی</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="imgWrap">
+                        <img class="img-responsive" src="{% static 'assets/img/aa.jpg' %}"/>
+                    </div>
+                </div>
+                <div class="col-md-5 clearfix" style="direction: rtl">
+                    <div class="col-xs-10">
+                        {% if teacher_courses %}
+                            <h3>کلاس هایی که شما استاد آن ها هستید</h3>
+                            <ul>
+                                {% for course in teacher_courses %}
+                                        <a href="{% url 'olympiad:course:teaching-hours' course.fname course.year course.cname %}">
+                                            <li>{{ course.cname }}</li>
+                                            </a>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if grader_problems %}
+                            <h3>سوالاتی که شما مصحح آن‌ها هستید</h3>
+                            <ul>
+                                {% for problem in grader_problems %}
+                                        <a href="{% url 'grade' problem.eid problem.pnum %}">
+                                            <li>{{ problem.text }}</li>
+                                        </a>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /productWrap -->
+{% endif %}
+
+{% if my_olympiads or isAdmin %}
+    <div id="featureWrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="sectionTitle">مدیریت</h2>
+                </div>
+            </div>
+            <div class="row">
                 {% for olympiad in my_olympiads %}
-                <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'olympiad:home' olympiad.fname olympiad.year %}'">
-					<i class="fa fa-tablet icon" style="font-size: 20px">{{ olympiad.year }} {{ olympiad.fname }}</i>
-                    <h3>مدیریت المپیاد</h3>
-				</div>
+                    <div class="col-sm-4 text-center feature"
+                         onclick="location.href='{% url 'olympiad:home' olympiad.fname olympiad.year %}'">
+                        <i class="fa fa-tablet icon"
+                           style="font-size: 20px">{{ olympiad.year }} {{ olympiad.fname }}</i>
+                        <h3>مدیریت المپیاد</h3>
+                    </div>
                 {% endfor %}
                 {% if isAdmin %}
-                    <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:new-olympiad' %}'">
-					<i class="fa fa-tablet icon" style="font-size: 20px">المپیاد جدید</i>
-                    <h3>اضافه کردن المپیاد علمی جدید</h3>
-				</div>
-				<div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:new-field' %}'">
-					<i class="fa fa-tablet icon" style="font-size: 15px"> رشته المپیادی جدید</i>
-                    <h3>اضافه کردن رشته المپیادی</h3>
-				</div>
-                    <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:new-university-field' %}'">
-					<i class="fa fa-tablet icon" style="font-size: 15px"> رشته دانشگاهی جدید</i>
-                    <h3>اضافه کردن رشته دانشگاهی</h3>
-				</div>
-                <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:scholars-list' %}'">
-					<i class="fa fa-tablet icon" style="font-size: 20px"> بنیاد ملی نخبگان</i>
-                    <h3>مشاهده اعضای بنیاد ملی نخبگان</h3>
-				</div>
-                <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:field-requests' %}'">
-					<i class="fa fa-tablet icon" style="font-size: 20px">سهمیه نقره و برنز</i>
-                    <h3>اعمال سهمیه مدال در رشته های دانشگاهی</h3>
-				</div>
+                    <div class="col-sm-4 text-center feature"
+                         onclick="location.href='{% url 'dbadmin:new-olympiad' %}'">
+                        <i class="fa fa-tablet icon" style="font-size: 20px">المپیاد جدید</i>
+                        <h3>اضافه کردن المپیاد علمی جدید</h3>
+                    </div>
+                    <div class="col-sm-4 text-center feature" onclick="location.href='{% url 'dbadmin:new-field' %}'">
+                        <i class="fa fa-tablet icon" style="font-size: 15px"> رشته المپیادی جدید</i>
+                        <h3>اضافه کردن رشته المپیادی</h3>
+                    </div>
+                    <div class="col-sm-4 text-center feature"
+                         onclick="location.href='{% url 'dbadmin:new-university-field' %}'">
+                        <i class="fa fa-tablet icon" style="font-size: 15px"> رشته دانشگاهی جدید</i>
+                        <h3>اضافه کردن رشته دانشگاهی</h3>
+                    </div>
+                    <div class="col-sm-4 text-center feature"
+                         onclick="location.href='{% url 'dbadmin:scholars-list' %}'">
+                        <i class="fa fa-tablet icon" style="font-size: 20px"> بنیاد ملی نخبگان</i>
+                        <h3>مشاهده اعضای بنیاد ملی نخبگان</h3>
+                    </div>
+                    <div class="col-sm-4 text-center feature"
+                         onclick="location.href='{% url 'dbadmin:field-requests' %}'">
+                        <i class="fa fa-tablet icon" style="font-size: 20px">سهمیه نقره و برنز</i>
+                        <h3>اعمال سهمیه مدال در رشته های دانشگاهی</h3>
+                    </div>
                 {% endif %}
-			</div>
-		</div>
-	</div> <!-- /featureWrap -->
-    {% endif %}
+            </div>
+        </div>
+    </div> <!-- /featureWrap -->
+{% endif %}
 
-	<footer>
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<p>Copyright &copy; 2014 AppBay - Responsive App Landing Page Template. Built by <a href="http://bootstrapbay.com">BootstrapBay</a>. All Rights Reserved</p>
-					<p class="social">
-						<a href="https://www.facebook.com/bootstrapbay">
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <p>Copyright &copy; 2014 AppBay - Responsive App Landing Page Template. Built by <a
+                        href="http://bootstrapbay.com">BootstrapBay</a>. All Rights Reserved</p>
+                <p class="social">
+                    <a href="https://www.facebook.com/bootstrapbay">
 							<span class="fa-stack fa-lg">
 								<i class="fa fa-circle fa-stack-2x"></i>
 								<i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
 							</span>
-						</a>
-						<a href="https://twitter.com/bootstrapbay">
+                    </a>
+                    <a href="https://twitter.com/bootstrapbay">
 							<span class="fa-stack fa-lg">
 								<i class="fa fa-circle fa-stack-2x"></i>
 								<i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
 							</span>
-						</a>
-						<a href="https://plus.google.com/+BootstrapbayThemes">
+                    </a>
+                    <a href="https://plus.google.com/+BootstrapbayThemes">
 							<span class="fa-stack fa-lg">
 								<i class="fa fa-circle fa-stack-2x"></i>
 								<i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
 							</span>
-						</a>
-						<a href="http://www.youtube.com/user/bootstrapbayofficial">
+                    </a>
+                    <a href="http://www.youtube.com/user/bootstrapbayofficial">
 							<span class="fa-stack fa-lg">
 								<i class="fa fa-circle fa-stack-2x"></i>
 								<i class="fa fa-youtube fa-stack-1x fa-inverse"></i>
 							</span>
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</footer>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/flexslider.js' %}"></script>
-	
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/flexslider.js' %}"></script>
+
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function () {
 
-	$('.mobileSlider').flexslider({
-		animation: "slide",
-		slideshowSpeed: 3000,
-		controlNav: false,
-		directionNav: true,
-		prevText: "&#171;",
-		nextText: "&#187;"
-	});
-	$('.flexslider').flexslider({
-		animation: "slide",
-		directionNav: false
-	});
-		
-	$('a[href*=#]:not([href=#])').click(function() {
-		if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') || location.hostname == this.hostname) {
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-			if ($(window).width() < 768) {
-				if (target.length) {
-					$('html,body').animate({
-						scrollTop: target.offset().top - $('.navbar-header').outerHeight(true) + 1
-					}, 1000);
-					return false;
-				}
-			}
-			else {
-				if (target.length) {
-					$('html,body').animate({
-						scrollTop: target.offset().top - $('.navbar').outerHeight(true) + 1
-					}, 1000);
-					return false;
-				}
-			}
+        $('.mobileSlider').flexslider({
+            animation: "slide",
+            slideshowSpeed: 3000,
+            controlNav: false,
+            directionNav: true,
+            prevText: "&#171;",
+            nextText: "&#187;"
+        });
+        $('.flexslider').flexslider({
+            animation: "slide",
+            directionNav: false
+        });
 
-		}
-	});
-	
-	$('#toTop').click(function() {
-		$('html,body').animate({
-			scrollTop: 0
-		}, 1000);
-	});
-	
-	var timer;
-    $(window).bind('scroll',function () {
-        clearTimeout(timer);
-        timer = setTimeout( refresh , 50 );
+        $('a[href*=#]:not([href=#])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if ($(window).width() < 768) {
+                    if (target.length) {
+                        $('html,body').animate({
+                            scrollTop: target.offset().top - $('.navbar-header').outerHeight(true) + 1
+                        }, 1000);
+                        return false;
+                    }
+                }
+                else {
+                    if (target.length) {
+                        $('html,body').animate({
+                            scrollTop: target.offset().top - $('.navbar').outerHeight(true) + 1
+                        }, 1000);
+                        return false;
+                    }
+                }
+
+            }
+        });
+
+        $('#toTop').click(function () {
+            $('html,body').animate({
+                scrollTop: 0
+            }, 1000);
+        });
+
+        var timer;
+        $(window).bind('scroll', function () {
+            clearTimeout(timer);
+            timer = setTimeout(refresh, 50);
+        });
+        var refresh = function () {
+            if ($(window).scrollTop() > 100) {
+                $(".tagline").fadeTo("slow", 0);
+            }
+            else {
+                $(".tagline").fadeTo("slow", 1);
+            }
+        };
+
     });
-    var refresh = function () {
-		if ($(window).scrollTop()>100) {
-			$(".tagline").fadeTo( "slow", 0 );
-		}
-		else {
-			$(".tagline").fadeTo( "slow", 1 );
-		}
-    };
-		
-});
 </script>
-  </body>
+</body>
 </html>

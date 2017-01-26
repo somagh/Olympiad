@@ -1,0 +1,50 @@
+{% extends  "base.html" %}
+
+{% block title %}ساعات کاری{% endblock %}
+{% block content%}
+    <h1>ساعات کاری</h1>
+    <p>حقوق ساعتی: {{ hourly_wage }} ریال </p>
+    <table class="table table-hover table-striped">
+    <thead>
+        <th>روز</th>
+        <th>ساعت شروع</th>
+        <th>ساعت پایان</th>
+        <th>مدت</th>
+        <th>حقوق</th>
+    </thead>
+    <tbody>
+    {% for hour in hours %}
+            <tr>
+                <td>
+                    {{ hour.day }}
+                </td>
+                <td>
+                    {{ hour.st }}
+                </td>
+                <td>
+                    {{ hour.en }}
+                </td>
+                <td>{{ hour.time }}</td>
+                <td>
+                    {{ hour.wage }}
+                </td>
+            </tr>
+    {% endfor %}
+    <tr>
+        <td><b>مجموع</b></td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+            {{ total_time }}
+        </td>
+        <td>
+            {{ total_wage }}
+        </td>
+    </tr>
+    </tbody>
+    </table>
+    {% block form %}
+    {% endblock %}
+{% endblock %}

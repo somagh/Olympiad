@@ -8,10 +8,9 @@ class ManageLevelsView(OlympiadMixin,FormView):
     template_name = 'olympiad/levels.html'
     form_class = LevelForm
     def dispatch(self, request, *args, **kwargs):
-        self.medalists = run_query("select scholar_id , name from summercamp_silver join human on scholar_id=national_code where year=%s and fname=%s", [kwargs['year'], kwargs['fname']],
-                              fetch=True, raise_not_found=False) \
-                    + run_query("select scholar_id , name from summercamp_bronze join human on scholar_id=national_code where year=%s and fname=%s", [kwargs['year'], kwargs['fname']],
-                                fetch=True, raise_not_found=False)
+        self.medalists = run_query("select scholar_id , name from summercamp_silver join human on scholar_id=national_code where year=%s and fname=%s union "
+                                   "select scholar_id , name from summercamp_bronze join human on scholar_id=national_code where year=%s and fname=%s",
+                                   [kwargs['year'], kwargs['fname'],kwargs['year'],kwargs['fname']],fetch=True, raise_not_found=False)
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):

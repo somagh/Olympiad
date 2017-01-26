@@ -18,10 +18,13 @@
                 <td>
                     {{ course.name }}
                 </td>
+                <td>
+                    <a class="btn btn-default" href="{% url 'olympiad:course:add-teaching-hour' fname year course.cname %}"> اضافه کردن ساعت تدریس</a>
+                </td>
             </tr>
     {% endfor %}
-    <tbody>
-    <table class="table table-hover table-striped">
+    </tbody>
+    </table>
         <a href="{% url 'olympiad:course:add' fname year%}"><button type="button" class="btn btn-success">کلاس جدید</button></a>
     <a href="{% url 'olympiad:home' fname year %}">
         <button class="btn btn-primary" type="button">بازگشت</button>
