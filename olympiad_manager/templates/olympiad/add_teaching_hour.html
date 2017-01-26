@@ -1,7 +1,7 @@
 {% extends  "olympiad/teaching-hours.html" %}
 {% load static%}
-
-{% block form   %}
+{% block title %} اضافه کردن ساعات کاری{% endblock %}
+{% block form %}
  <form method="post">
      <h2>اضافه کردن ساعت کاری</h2>
     {% csrf_token %}
