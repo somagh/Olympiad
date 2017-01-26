@@ -29,3 +29,30 @@ class ResultsView(TemplateView):
             context['title'] = 'شرکنندگان المپیاد'
         context['queryset'] = queryset
         return context
+
+
+class Medalsview(TemplateView):
+    template_name = 'olympiad/medals.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.fname = kwargs['fname']
+        self.year = kwargs['year']
+        golds = run_query('select scholar_id as id, name from summercamp_gold join human on '
+                          'scholar_id=national_code where fname=%s and year=%s',
+                          [self.fname, self.year],
+                          fetch=True, raise_not_found=False)
+        context['gold'] = golds
+
+        silvers = run_query('select scholar_id as id, name from summercamp_silver join human on '
+                            'scholar_id=national_code where fname=%s and year=%s',
+                            [self.fname, self.year],
+                            fetch=True, raise_not_found=False)
+        context['silver'] = silvers
+
+        bronzes = run_query('select scholar_id as id, name from summercamp_bronze join human on '
+                            'scholar_id=national_code where fname=%s and year=%s',
+                            [self.fname, self.year],
+                            fetch=True, raise_not_found=False)
+        context['bronze'] = bronzes
+        return context

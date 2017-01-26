@@ -1,10 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends  "base.html" %}
 
-</body>
-</html>
+{% block title %}نتایج{% endblock %}
+{% block content%}
+    <h1>مدال آوران طلا</h1>
+    <table class="table table-hover table-striped">
+        <thead>
+        <th>ردیف</th>
+        <th>کد ملی</th>
+        <th>نام و نام‌خانوادگی</th>
+        </thead>
+    {% for q in gold %}
+        <tr>
+            <td style="background-color: gold;">{{forloop.counter}}</td>
+            <td>{{q.id}}</td>
+            <td>{{q.name}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <h2>مدال آوران نقره</h2>
+    <table class="table table-hover table-striped">
+        <thead>
+        <th>ردیف</th>
+        <th>کد ملی</th>
+        <th>نام و نام‌خانوادگی</th>
+        </thead>
+    {% for q in silver %}
+        <tr>
+            <td style="background-color: #e6e8fa;">{{forloop.counter}}</td>
+            <td>{{q.id}}</td>
+            <td>{{q.name}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <h2>مدال آوران برنز</h2>
+    <table class="table table-hover table-striped">
+        <thead>
+        <th>ردیف</th>
+        <th>کد ملی</th>
+        <th>نام و نام‌خانوادگی</th>
+        </thead>
+    {% for q in bronze %}
+        <tr>
+            <td style="background-color: #8c7853;">{{forloop.counter}}</td>
+            <td>{{q.id}}</td>
+            <td>{{q.name}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

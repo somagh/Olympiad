@@ -101,7 +101,7 @@ class FieldRequests(AdminPermission, FormView):
         for h in q:
             current = count.get(h['field_id'], 0)
             if h['olympiad_capacity'] - current >= 0:
-                if h['level'] and int(h['level']) * 1.2 >= h['min_level']:
+                if h['level'] and int(h['level']) * 1.25 >= h['min_level']:
                     run_query('update scholar set university_field_id=%s where id=%s',
                               [h['field_id'], h['national_code']])
                     count[h['field_id']] = current + 1
