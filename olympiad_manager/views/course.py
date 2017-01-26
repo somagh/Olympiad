@@ -71,6 +71,8 @@ class TeachingHourListView(TemplateView):
 
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
+        run_query('select * from course where fname=%s and year=%s and cname=%s and teacher_id=%s ',
+                  [kwargs['fname'], kwargs['year'], kwargs['cname'], self.request.session['user']['national_code']], fetch=True)
         context['hours']=run_query("select st,en,day,en-st as time,(en-st)*hourly_wage as wage from teachinghour natural join course where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True,raise_not_found=False)
         context['hourly_wage']=run_query("select hourly_wage from course where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['hourly_wage']
         context['total_time']=run_query("select sum(en-st) as sum from teachinghour where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['sum']
@@ -84,6 +86,10 @@ class AddTeachingHourView(OlympiadMixin,TeachingHourListView,FormView):
     def dispatch(self, request, *args, **kwargs):
         self.cname=kwargs['cname']
         return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('olympiad:course:add-teaching-hour', args=[self.fname, self.year,
+                                                                  self.kwargs['cname']])
 
     def form_valid(self, form):
         data=form.cleaned_data

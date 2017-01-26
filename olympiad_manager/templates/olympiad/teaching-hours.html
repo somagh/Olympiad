@@ -37,10 +37,10 @@
         <td>
         </td>
         <td>
-            {{ total_time }}
+            {% if total_time %} {{ total_time }} {% else %} 0 {% endif %}
         </td>
         <td>
-            {{ total_wage }} ریال
+            {% if total_wage %} {{ total_wage }}  {% else %} 0 {% endif %} ریال
         </td>
     </tr>
     </tbody>

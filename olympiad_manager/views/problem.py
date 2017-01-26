@@ -174,6 +174,8 @@ class GradeView(FormView):
     def dispatch(self, request, *args, **kwargs):
         self.eid = self.kwargs['eid']
         self.user = request.session['user']
+        run_query('select * from grading where eid=%s and pnum=%s and grader_id=%s',
+                  [self.eid, kwargs['pnum'], self.user['national_code']], fetch=True)
         exam = run_query('select fname, year from m1 where eid=%s', [self.eid], fetch=True,
                          raise_not_found=False)
         if len(exam) == 0:
