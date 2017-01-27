@@ -69,22 +69,48 @@ class EditCourseView(OlympiadMixin, FormView):
 class TeachingHourListView(TemplateView):
     template_name = 'olympiad/teaching-hours.html'
 
-    def get_context_data(self,**kwargs):
-        context=super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         run_query('select * from course where fname=%s and year=%s and cname=%s and teacher_id=%s ',
-                  [kwargs['fname'], kwargs['year'], kwargs['cname'], self.request.session['user']['national_code']], fetch=True)
-        context['hours']=run_query("select st,en,day,en-st as time,(en-st)*hourly_wage as wage from teachinghour natural join course where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True,raise_not_found=False)
-        context['hourly_wage']=run_query("select hourly_wage from course where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['hourly_wage']
-        context['total_time']=run_query("select sum(en-st) as sum from teachinghour where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['sum']
-        context['total_wage']=run_query("select sum((en-st)*hourly_wage) as total from course natural join teachinghour where cname=%s and fname=%s and year=%s",[kwargs['cname'],kwargs['fname'],kwargs['year']],fetch=True)[0]['total']
+                  [kwargs['fname'], kwargs['year'], kwargs['cname'],
+                   self.request.session['user']['national_code']], fetch=True)
+        context['hours'] = run_query(
+            "select st,en,day,en-st as time,(en-st)*hourly_wage as wage from teachinghour natural join course where cname=%s and fname=%s and year=%s",
+            [kwargs['cname'], kwargs['fname'], kwargs['year']], fetch=True, raise_not_found=False)
+        context['hourly_wage'] = \
+        run_query("select hourly_wage from course where cname=%s and fname=%s and year=%s",
+                  [kwargs['cname'], kwargs['fname'], kwargs['year']], fetch=True)[0]['hourly_wage']
+        context['total_time'] = run_query(
+            "select sum(en-st) as sum from teachinghour where cname=%s and fname=%s and year=%s",
+            [kwargs['cname'], kwargs['fname'], kwargs['year']], fetch=True)[0]['sum']
+        context['total_wage'] = run_query(
+            "select sum((en-st)*hourly_wage) as total from course natural join teachinghour where cname=%s and fname=%s and year=%s",
+            [kwargs['cname'], kwargs['fname'], kwargs['year']], fetch=True)[0]['total']
         return context
 
-class AddTeachingHourView(OlympiadMixin,TeachingHourListView,FormView):
+
+class AddTeachingHourView(OlympiadMixin, FormView):
     template_name = 'olympiad/add_teaching_hour.html'
     form_class = TeachingHourForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['hours'] = run_query(
+            "select st,en,day,en-st as time,(en-st)*hourly_wage as wage from teachinghour natural join course where cname=%s and fname=%s and year=%s",
+            [self.kwargs['cname'], self.kwargs['fname'], self.kwargs['year']], fetch=True, raise_not_found=False)
+        context['hourly_wage'] = \
+        run_query("select hourly_wage from course where cname=%s and fname=%s and year=%s",
+                  [self.kwargs['cname'], self.kwargs['fname'], self.kwargs['year']], fetch=True)[0]['hourly_wage']
+        context['total_time'] = run_query(
+            "select sum(en-st) as sum from teachinghour where cname=%s and fname=%s and year=%s",
+            [self.kwargs['cname'], self.kwargs['fname'], self.kwargs['year']], fetch=True)[0]['sum']
+        context['total_wage'] = run_query(
+            "select sum((en-st)*hourly_wage) as total from course natural join teachinghour where cname=%s and fname=%s and year=%s",
+            [self.kwargs['cname'], self.kwargs['fname'], self.kwargs['year']], fetch=True)[0]['total']
+        return context
+
     def dispatch(self, request, *args, **kwargs):
-        self.cname=kwargs['cname']
+        self.cname = kwargs['cname']
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -92,6 +118,7 @@ class AddTeachingHourView(OlympiadMixin,TeachingHourListView,FormView):
                                                                   self.kwargs['cname']])
 
     def form_valid(self, form):
-        data=form.cleaned_data
-        run_query("insert into teachinghour(fname,year,cname,st,en,day) values(%s,%s,%s,%s,%s,%s)",[self.fname,self.year,self.cname,data['st'],data['en'],data['day']])
+        data = form.cleaned_data
+        run_query("insert into teachinghour(fname,year,cname,st,en,day) values(%s,%s,%s,%s,%s,%s)",
+                  [self.fname, self.year, self.cname, data['st'], data['en'], data['day']])
         return super().form_valid(form)

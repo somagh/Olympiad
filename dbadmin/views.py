@@ -1,3 +1,6 @@
+import random
+
+from Crypto.Random.random import randint
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden
@@ -43,7 +46,6 @@ class NewOl(AdminPermission, FormView):
         return reverse('ysc:home')
 
     def form_valid(self, form):
-        print(self.request.session['user'])
         run_query(
             "insert into olympiad(fname, max_fail, year, m1_no, m2_no, manager) values(%s,%s,%s,%s,%s,%s)",
             [form.data['feol'], form.data['saghf'], form.data['yr'], form.data['t_m1'],

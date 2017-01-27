@@ -35,7 +35,7 @@ class ProblemForm(forms.Form):
     score = forms.IntegerField(label='نمره')
     type = forms.BooleanField(label='تستی', required=False)
     text = forms.CharField(widget=forms.Textarea(), label='متن سوال')
-    author = forms.CharField(initial='044013221')  # TODO: REMOVE THIS LATER
+    author = forms.CharField(label='طراح')
 
     def clean(self):
         data = super().clean()

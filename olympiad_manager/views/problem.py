@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.templatetags.static import register
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView
