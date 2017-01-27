@@ -16,6 +16,12 @@
               {% csrf_token %}
               <button class="btn btn-success" type="submit">ثبت‌نام مدال‌آوران در بنیاد ملی نخبگان</button>
        </form>
+              <br>
+              <a class="btn btn-success" href="{% url 'olympiad:refresh-m2' fname year %}">اعمال نتایج مرحله دوم</a>
+              <br>
+              <br>
+              <a class="btn btn-success" href="{% url 'olympiad:refresh-medal' fname year %}">اعمال مدال‌های طلا، نقره و برنز</a>
+
        </div>
 {% endblock %}
 

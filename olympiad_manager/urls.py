@@ -4,7 +4,7 @@ from olympiad_manager.views.levels import ManageLevelsView
 from olympiad_manager.views.course import AddCourseView, EditCourseView, AddTeachingHourView, \
     TeachingHourListView
 from olympiad_manager.views.course import CourseListView
-from olympiad_manager.views.home import OlympiadView
+from olympiad_manager.views.home import OlympiadView, RefreshM2, RefreshMedal
 from olympiad_manager.views.m1m2date import M1M2Date
 from olympiad_manager.views.problem import ProblemListView, AddProblemView, EditProblemView, \
     ManageGraderView, \
@@ -44,6 +44,8 @@ olympiad_urlpatterns = [
     url(r'^summer-exam/', include(summer_exam_urlpatterns, namespace='summer-camp-exam')),
     url(r'^m1m2date/$', M1M2Date.as_view(), name='m1m2date'),
     url(r'^results/$', ResultsView.as_view(), name='results'),
+    url(r'^refresh-m2/$', RefreshM2.as_view(), name='refresh-m2'),
+    url(r'^refresh-medal/$', RefreshMedal.as_view(), name='refresh-medal'),
     url(r'^medals/$', Medalsview.as_view(), name='medals'),
     url(r'^problem/(?P<eid>\d+)/', include(problem_urlpatterns, namespace='problem')),
     url(r'^levels/$', ManageLevelsView.as_view(), name="levels"),
