@@ -78,13 +78,10 @@ class RequestSilverUniversityField(SuccessMessageMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.groups = run_query('select gp_name from groups where fname in (select fname from '
-                                'summercamp_silver where scholar_id=%s)',
-                                [request.session['user']['national_code']], fetch=True,
-                                raise_not_found=False)
-        self.groups += run_query('select gp_name from groups where fname in (select fname from '
+                                'summercamp_silver where scholar_id=%s) union select gp_name from groups where fname in (select fname from '
                                  'summercamp_bronze where scholar_id=%s)',
-                                 [request.session['user']['national_code']], fetch=True,
-                                 raise_not_found=False)
+                                [request.session['user']['national_code'],request.session['user']['national_code']], fetch=True,
+                                raise_not_found=False)
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
