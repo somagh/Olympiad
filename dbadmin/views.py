@@ -1,8 +1,4 @@
-import random
-
-from Crypto.Random.random import randint
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import reverse
 
